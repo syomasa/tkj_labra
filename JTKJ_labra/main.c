@@ -28,43 +28,82 @@
 Char labTaskStack[STACKSIZE];
 // Char commTaskStack[STACKSIZE];
 
-// JTKJ: Tehtävä 1. Painonappien alustus ja muuttujat
+// JTKJ: Tehtï¿½vï¿½ 1. Painonappien alustus ja muuttujat
 // JTKJ: Exercise 1. Pin configuration and variables here
+static PIN_Handle buttonHandle;
+static PIN_State buttonState;
 
-// JTKJ: Tehtävä 1.Painonapin keskeytyksen käsittelijä
-//       Käsittelijässä vilkuta punaista lediä
+static PIN_Handle ledHandle;
+static PIN_State ledState;
+
+PIN_Config buttonConfig[] = {
+   Board_BUTTON0  | PIN_INPUT_EN | PIN_PULLUP | PIN_IRQ_NEGEDGE, // NeljÃ¤n vakion TAI-operaatio
+   PIN_TERMINATE // Taulukko lopetetaan aina tÃ¤llÃ¤ vakiolla
+};
+
+// Ledipinni
+PIN_Config ledConfig[] = {
+   Board_LED1 | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL | PIN_DRVSTR_MAX,
+   PIN_TERMINATE // Taulukko lopetetaan aina tÃ¤llÃ¤ vakiolla
+};
+
+
+// JTKJ: Tehtï¿½vï¿½ 1.Painonapin keskeytyksen kï¿½sittelijï¿½
+//       Kï¿½sittelijï¿½ssï¿½ vilkuta punaista lediï¿½
 // JTKJ: Exercise 1. Pin interrupt handler
 //       Blink the red led of the device
 
+void buttonFxn(PIN_Handle handle, PIN_Id pinId) {
+
+   // Vaihdetaan led-pinnin tilaa negaatiolla
+   PIN_setOutputValue( ledHandle, Board_LED1, !PIN_getOutputValue( Board_LED1 ) );
+}
+
 /* Task Functions */
 Void labTaskFxn(UArg arg0, UArg arg1) {
+	uint8_t i;
+	double lux;
 
     I2C_Handle      i2c;
     I2C_Params      i2cParams;
     Display_Handle	displayHandle;
     UART_Handle 	uartHandle;
 
-    // JTKJ: Tehtävä 2. Avaa i2c-väylä taskin käyttöön
+    // JTKJ: Tehtï¿½vï¿½ 2. Avaa i2c-vï¿½ylï¿½ taskin kï¿½yttï¿½ï¿½n
     // JTKJ: Exercise 2. Open the i2c bus0
+    I2C_Params_init(&i2cParams);
+    i2cParams.bitRate = I2C_400kHz;
+    i2c = I2C_open(Board_I2C_TMP, &i2cParams);
+    if (i2c == NULL)
+    {
+    	System_abort("Error Initializing I2C\n");
+    }
 
-    // JTKJ: Tehtävä 2. Sensorin alustus kirjastofunktiolla ennen datan lukemista
+    // JTKJ: Tehtï¿½vï¿½ 2. Sensorin alustus kirjastofunktiolla ennen datan lukemista
     // JTKJ: Exercise 2. Setup the sensor here, before its use
+    opt3001_setup(&i2c);
 
-	// JTKJ: Tehtävä 3. Näytön alustus
+	// JTKJ: Tehtï¿½vï¿½ 3. Nï¿½ytï¿½n alustus
     // JTKJ: Exercise 3. Setup the display here
 
-    // JTKJ: Tehtävä 4. UARTin alustus
+    // JTKJ: Tehtï¿½vï¿½ 4. UARTin alustus
     // JTKJ: Exercise 4. Setup UART connection
 
     while (1) {
 
-        // JTKJ: Tehtävä 2. Lue sensorilta dataa ja tulosta se Debug-ikkunaan
+        // JTKJ: Tehtï¿½vï¿½ 2. Lue sensorilta dataa ja tulosta se Debug-ikkunaan
         // JTKJ: Exercise 2. Read sensor data and print it to the Debug window
+    	lux = opt3001_get_data(&i2c);
+    	char string[16];
+    	sprintf(string, "%lf\n", lux);
+    	System_printf(string);
+    	System_flush();
 
-    	// JTKJ: Tehtävä 3. Tulosta sensorin arvo merkkijonoon ja kirjoita se ruudulle
+    	// JTKJ: Tehtï¿½vï¿½ 3. Tulosta sensorin arvo merkkijonoon ja kirjoita se ruudulle
 		// JTKJ: Exercise 3. Store the sensor value as char array and print it to the display
 
-    	// JTKJ: Tehtävä 4. Lähetä CSV-muotoinen merkkijono UARTilla
+
+    	// JTKJ: Tehtï¿½vï¿½ 4. Lï¿½hetï¿½ CSV-muotoinen merkkijono UARTilla
 		// JTKJ: Exercise 4. Send CSV string with UART
 
     	// Once per second
@@ -108,17 +147,31 @@ Int main(void) {
     // Initialize board
     Board_initGeneral();
 
-    // JTKJ: Tehtävä 2. i2c-cäylä käyttöön ohjelmassa
+    // JTKJ: Tehtï¿½vï¿½ 2. i2c-cï¿½ylï¿½ kï¿½yttï¿½ï¿½n ohjelmassa
     // JTKJ: Exercise 2. Use i2c bus in program
-
-    // JTKJ: Tehtävä 4. UART käyttöön ohjelmassa
+    Board_initI2C();
+    // JTKJ: Tehtï¿½vï¿½ 4. UART kï¿½yttï¿½ï¿½n ohjelmassa
     // JTKJ: Exercise 4. Use UART in program
 
-    // JTKJ: Tehtävä 1. Painonappi- ja ledipinnit käyttöön tässä
+    // JTKJ: Tehtï¿½vï¿½ 1. Painonappi- ja ledipinnit kï¿½yttï¿½ï¿½n tï¿½ssï¿½
 	// JTKJ: Exercise 1. Open and configure the button and led pins here
+    buttonHandle = PIN_open(&buttonState, buttonConfig);
+    if(!buttonHandle)
+    {
+    	System_abort("Error initializing button pins\n");
+    }
+    ledHandle = PIN_open(&ledState, ledConfig);
+    if(!ledHandle)
+    {
+    	System_abort("Error initializing LED pins\n");
+    }
 
-    // JTKJ: Tehtävä 1. Rekisteröi painonapille keskeytyksen käsittelijäfunktio
+    // JTKJ: Tehtï¿½vï¿½ 1. Rekisterï¿½i painonapille keskeytyksen kï¿½sittelijï¿½funktio
 	// JTKJ: Exercise 1. Register the interrupt handler for the button
+    if (PIN_registerIntCb(buttonHandle, &buttonFxn) != 0)
+    {
+    	System_abort("Error registering button callback function");
+    }
 
     /* Task */
     Task_Params_init(&labTaskParams);

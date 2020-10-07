@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 /* XDCtools files */
 #include <xdc/std.h>
@@ -63,11 +64,21 @@ void buttonFxn(PIN_Handle handle, PIN_Id pinId) {
 Void labTaskFxn(UArg arg0, UArg arg1) {
 	uint8_t i;
 	double lux;
+	char input;
+	char echo_msg[80];
+
+	// Alustetaan näyttö taskin alussa!
+	Display_Params params;
+	Display_Params_init(&params);
+	params.lineClearMode = DISPLAY_CLEAR_BOTH;
+
+	// UART-kirjaston asetukset
+	UART_Handle uart;
+	UART_Params uartParams;
 
     I2C_Handle      i2c;
     I2C_Params      i2cParams;
-    Display_Handle	displayHandle;
-    UART_Handle 	uartHandle;
+    Display_Handle	displayHandle = Display_open(Display_Type_LCD, &params);
 
     // JTKJ: Teht�v� 2. Avaa i2c-v�yl� taskin k�ytt��n
     // JTKJ: Exercise 2. Open the i2c bus0
@@ -88,6 +99,20 @@ Void labTaskFxn(UArg arg0, UArg arg1) {
 
     // JTKJ: Teht�v� 4. UARTin alustus
     // JTKJ: Exercise 4. Setup UART connection
+    UART_Params_init(&uartParams);
+    uartParams.writeDataMode = UART_DATA_TEXT;
+    uartParams.readDataMode = UART_DATA_TEXT;
+    uartParams.readEcho = UART_ECHO_OFF;
+    uartParams.readMode = UART_MODE_BLOCKING;
+    uartParams.baudRate = 9600; // nopeus 9600baud
+    uartParams.dataLength = UART_LEN_8; // 8
+    uartParams.parityType = UART_PAR_NONE; // n
+    uartParams.stopBits = UART_STOP_ONE; // 1
+
+    uart = UART_open(Board_UART0, &uartParams);
+    if (uart == NULL) {
+    	System_abort("Error opening the UART");
+    }
 
     while (1) {
 
@@ -95,9 +120,20 @@ Void labTaskFxn(UArg arg0, UArg arg1) {
         // JTKJ: Exercise 2. Read sensor data and print it to the Debug window
     	lux = opt3001_get_data(&i2c);
     	char string[16];
-    	sprintf(string, "%lf\n", lux);
-    	System_printf(string);
-    	System_flush();
+    	//sprintf(string, "%lf lux", lux);
+    	//System_printf(string);
+    	//System_flush();
+
+    	if (displayHandle)
+    	{
+    		Display_print0(displayHandle, 1, 1, string);
+
+    	    // Näytetään teksti 5s ajan
+    	    Task_sleep(5 * 1000000/Clock_tickPeriod);
+
+    	    // Tyhjennetään näyt1tö
+    	    Display_clear(displayHandle);
+    	}
 
     	// JTKJ: Teht�v� 3. Tulosta sensorin arvo merkkijonoon ja kirjoita se ruudulle
 		// JTKJ: Exercise 3. Store the sensor value as char array and print it to the display
@@ -105,6 +141,12 @@ Void labTaskFxn(UArg arg0, UArg arg1) {
 
     	// JTKJ: Teht�v� 4. L�het� CSV-muotoinen merkkijono UARTilla
 		// JTKJ: Exercise 4. Send CSV string with UART
+    	// Vastaanotetaan 1 merkki kerrallaan input-muuttujaan
+    	//UART_read(uart, &input, 1);
+
+    	// Kaiutetaan merkki takaisin
+    	sprintf(echo_msg, "id:427,light=%lf\n", lux);
+    	UART_write(uart, echo_msg, strlen(echo_msg));
 
     	// Once per second
     	Task_sleep(1000000 / Clock_tickPeriod);
@@ -152,6 +194,7 @@ Int main(void) {
     Board_initI2C();
     // JTKJ: Teht�v� 4. UART k�ytt��n ohjelmassa
     // JTKJ: Exercise 4. Use UART in program
+    Board_initUART();
 
     // JTKJ: Teht�v� 1. Painonappi- ja ledipinnit k�ytt��n t�ss�
 	// JTKJ: Exercise 1. Open and configure the button and led pins here

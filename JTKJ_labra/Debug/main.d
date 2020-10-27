@@ -199,9 +199,34 @@ main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00
 main.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h
 main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/I2C.h
 main.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h
+main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/i2c/I2CCC26XX.h
 main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/Power.h
 main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/utils/List.h
 main.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h
+main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/family/arm/m3/Hwi.h
+main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Swi.h
+main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Semaphore.h
+main.obj: /home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
+main.obj: /home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IInstance.h
+main.obj: /home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Diags.h
+main.obj: /home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Log.h
+main.obj: /home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Assert.h
+main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Queue.h
+main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Task.h
+main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Clock.h
+main.obj: /home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IModule.h
+main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Event.h
+main.obj: /home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
+main.obj: /home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IInstance.h
+main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Event__prologue.h
+main.obj: /home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Assert.h
+main.obj: /home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Diags.h
+main.obj: /home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Log.h
+main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Queue.h
+main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Clock.h
+main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Task.h
+main.obj: /home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IModule.h
+main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Event__epilogue.h
 main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/power/PowerCC26XX.h
 main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/family/arm/m3/Hwi.h
 main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Clock.h
@@ -220,6 +245,7 @@ main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2
 main.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/string.h
 main.obj: /home/student/workspace/JTKJ_labra/wireless/address.h
 main.obj: ../sensors/opt3001.h
+main.obj: ../sensors/mpu9250.h
 
 ../main.c: 
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdio.h: 
@@ -420,9 +446,34 @@ main.obj: ../sensors/opt3001.h
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/I2C.h: 
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h: 
+/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/i2c/I2CCC26XX.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/Power.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/utils/List.h: 
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h: 
+/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/family/arm/m3/Hwi.h: 
+/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Swi.h: 
+/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Semaphore.h: 
+/home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
+/home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IInstance.h: 
+/home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Diags.h: 
+/home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Log.h: 
+/home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Assert.h: 
+/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Queue.h: 
+/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Task.h: 
+/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Clock.h: 
+/home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IModule.h: 
+/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Event.h: 
+/home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
+/home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IInstance.h: 
+/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Event__prologue.h: 
+/home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Assert.h: 
+/home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Diags.h: 
+/home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Log.h: 
+/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Queue.h: 
+/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Clock.h: 
+/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Task.h: 
+/home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IModule.h: 
+/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Event__epilogue.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/power/PowerCC26XX.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/family/arm/m3/Hwi.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Clock.h: 
@@ -441,3 +492,4 @@ main.obj: ../sensors/opt3001.h
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/string.h: 
 /home/student/workspace/JTKJ_labra/wireless/address.h: 
 ../sensors/opt3001.h: 
+../sensors/mpu9250.h: 

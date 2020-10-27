@@ -502,11 +502,28 @@ void mpu9250_get_data(I2C_Handle *i2c, float *ax, float *ay, float *az, float *g
    	// JTKJ: 1. Read register values into array rawData
 	readByte( ACCEL_XOUT_H, 14, rawData);
 
-	// JTKJ: 2. Muunnetaan 8-bittiset rekisterinarvot 16-bittisiksi. Tässä siis 12
-	//          8-bittistä rekisteriarvoa (kiihtyvyyden x,y,z ja gyron x,y,z joista
-	//          kaikista sekä MSB että LSB. Taulukossa 16-bttinen data[0] koostuu
+	// JTKJ: 2. Muunnetaan 8-bittiset rekisterinarvot 16-bittisiksi. Tï¿½ssï¿½ siis 12
+	//          8-bittistï¿½ rekisteriarvoa (kiihtyvyyden x,y,z ja gyron x,y,z joista
+	//          kaikista sekï¿½ MSB ettï¿½ LSB. Taulukossa 16-bttinen data[0] koostuu
 	//          siis rekisterien ACCEL_XOUT_H (=MSB) ja ACCEL_XOUT_L (=LSB)
-	//          yhdistetyistä arvoista. data[1] on sitten vastaavat y-akselin arvot, jne
+	//          yhdistetyistï¿½ arvoista. data[1] on sitten vastaavat y-akselin arvot, jne
+
+	// Kiihtyvyysanturin arvot
+	//data[0] = (rawData[0] << 8) |Â rawData[1];
+	//data[1] = (rawData[2] << 8) |Â rawData[3];
+	data[0] = (rawData[0] << 8) | rawData[1];
+	data[1] = (rawData[2] << 8) | rawData[3];
+	data[2] = (rawData[4] << 8) | rawData[5];
+
+
+	// Gyron arvot
+	//data[4] = (rawData[8] << 8) |Â rawData[9];
+	data[4] = (rawData[8] << 8) | rawData[9];
+	//data[5] = (rawData[10] << 8) |Â rawData[11];
+	data[5] = (rawData[10] << 8) | rawData[11];
+	data[6] = (rawData[12] << 8) | rawData[13];
+
+
 	// JTKJ: 2. Convert 8-bit register values (rawData[14]) into corresponding 16-bit
 	//          values (data[7]), by bit operations. Here the value for data[0] comes
 	//          from ACCEL_XOUT_H (=MSB) ja ACCEL_XOUT_L (=LSB)
@@ -517,8 +534,8 @@ void mpu9250_get_data(I2C_Handle *i2c, float *ax, float *ay, float *az, float *g
 	*ay = (float)data[1]*aRes - accelBias[1];
 	*az = (float)data[2]*aRes - accelBias[2];
 
-	// JTKJ: 4. Muunnetaan g-arvot kulmanopeudeksi. Tämän muunnoksen voi tehdä
-	//          halutesaan, kumpikin tapa datan esitykselle käy
+	// JTKJ: 4. Muunnetaan g-arvot kulmanopeudeksi. Tï¿½mï¿½n muunnoksen voi tehdï¿½
+	//          halutesaan, kumpikin tapa datan esitykselle kï¿½y
 	// JTKJ: 4. Convert g values into degrees per second (this is optional,
 	//          you can work with g values also
 	*gx = (float)data[4]*gRes;

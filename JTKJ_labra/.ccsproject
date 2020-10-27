@@ -9,6 +9,6 @@
 	<rts value="libc.a"/>
 	<createSlaveProjects value=""/>
 	<templateProperties value="id=com_ti_rtsc_tirtoscc13XX_CC26XX_example_365.projectspec.empty_CC2650STK_TI_CC2650F128,type=rtsc,products=com.ti.rtsc.TIRTOSCC13XX_CC26XX,xdcToolsVersion=3_32_00_06_core,target=ti.targets.arm.elf.M3,platform=ti.platforms.simplelink:CC2650F128,buildProfile=release,isHybrid=true,configuroOptions= --compileOptions &quot;${COMPILER_FLAGS} &quot;,"/>
-	<origin value="/home/student/JTKJ_labra_2020"/>
+	<origin value="/home/student/JTK_LABRA_GIT/JTKJ_labra"/>
 	<filesToOpen value=""/>
 </projectOptions>

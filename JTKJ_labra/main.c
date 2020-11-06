@@ -26,20 +26,13 @@
 #include "sensors/opt3001.h"
 #include "sensors/mpu9250.h"
 
-#define OR || // for some reason ide broke the pipe symbol so this is a workaround
-
 /* Task */
 #define STACKSIZE 2048
+#define EDGE_VALUES 70
 Char labTaskStack[STACKSIZE];
+Char defaultStateStack[STACKSIZE];
+Char displayStack[STACKSIZE];
 // Char commTaskStack[STACKSIZE];
-
-// JTKJ: Teht�v� 1. Painonappien alustus ja muuttujat
-// JTKJ: Exercise 1. Pin configuration and variables here
-static PIN_Handle buttonHandle;
-static PIN_State buttonState;
-
-static PIN_Handle ledHandle;
-static PIN_State ledState;
 
 static PIN_Handle hMpuPin;
 static PIN_State MpuPinState;
@@ -53,56 +46,37 @@ static const I2CCC26XX_I2CPinCfg i2cMPUCfg = {
     .pinSCL = Board_I2C0_SCL1
 };
 
-PIN_Config buttonConfig[] = {
-   Board_BUTTON0  | PIN_INPUT_EN | PIN_PULLUP | PIN_IRQ_NEGEDGE, // Neljän vakion TAI-operaatio
-   PIN_TERMINATE // Taulukko lopetetaan aina tällä vakiolla
+
+enum state{STALE, READ_SENSOR, UPDATE, NEW_MSG};
+enum state myState = STALE;
+
+enum movement{STILL, LEFT, RIGHT, UP, DOWN};
+enum movement move = STILL;
+
+union Value {
+	int num;
+	char* str;
+	char c;
+	enum state;
 };
 
-// Ledipinni
-PIN_Config ledConfig[] = {
-   Board_LED1 | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL | PIN_DRVSTR_MAX,
-   PIN_TERMINATE // Taulukko lopetetaan aina tällä vakiolla
-};
-
-
-// JTKJ: Teht�v� 1.Painonapin keskeytyksen k�sittelij�
-//       K�sittelij�ss� vilkuta punaista ledi�
-// JTKJ: Exercise 1. Pin interrupt handler
-//       Blink the red led of the device
-
-void buttonFxn(PIN_Handle handle, PIN_Id pinId) {
-
-   // Vaihdetaan led-pinnin tilaa negaatiolla
-   PIN_setOutputValue( ledHandle, Board_LED1, !PIN_getOutputValue( Board_LED1 ) );
+void Print(char* format, union Value value)
+{
+	char str[20];
+	sprintf(str, format, value);
+	System_printf(str);
+	System_flush();
 }
-
 /* Task Functions */
 Void labTaskFxn(UArg arg0, UArg arg1) {
-	char string[126];
-	float ax, ay, az, gx, gy, gz;
 
 	// Alustetaan näyttö taskin alussa!
 	Display_Params params;
 	Display_Params_init(&params);
 	params.lineClearMode = DISPLAY_CLEAR_BOTH;
 
-	// UART-kirjaston asetukset
-	//UART_Handle uart;
-	//UART_Params uartParams;
-
-    I2C_Handle      i2c;
-    I2C_Params      i2cParams;
     Display_Handle displayHandle = Display_open(Display_Type_LCD, &params);
 
-    // JTKJ: Teht�v� 2. Avaa i2c-v�yl� taskin k�ytt��n
-    // JTKJ: Exercise 2. Open the i2c bus0
-    //I2C_Params_init(&i2cParams);
-    //i2cParams.bitRate = I2C_400kHz;
-    //i2c = I2C_open(Board_I2C_TMP, &i2cParams);
-    //if (i2c == NULL)
-    //{
-    //	System_abort("Error Initializing I2C\n");
-    //}
     I2C_Handle i2cMPU;
     I2C_Params i2cMPUParams;
     I2C_Params_init(&i2cMPUParams);
@@ -132,105 +106,144 @@ Void labTaskFxn(UArg arg0, UArg arg1) {
     System_printf("Mpu is ready now\n");
     System_flush();
 
-	// JTKJ: Teht�v� 3. N�yt�n alustus
-    // JTKJ: Exercise 3. Setup the display here
-
-    // JTKJ: Teht�v� 4. UARTin alustus
-    // JTKJ: Exercise 4. Setup UART connection
-    //UART_Params_init(&uartParams);
-    //uartParams.writeDataMode = UART_DATA_TEXT;
-    //uartParams.readDataMode = UART_DATA_TEXT;
-    //uartParams.readEcho = UART_ECHO_OFF;
-    //uartParams.readMode = UART_MODE_BLOCKING;
-    //uartParams.baudRate = 9600; // nopeus 9600baud
-    //uartParams.dataLength = UART_LEN_8; // 8
-    //uartParams.parityType = UART_PAR_NONE; // n
-    //uartParams.stopBits = UART_STOP_ONE; // 1
-
-    //uart = UART_open(Board_UART0, &uartParams);
-    //if (uart == NULL) {
-    //	System_abort("Error opening the UART");
-    //}
     I2C_close(i2cMPU);
+}
 
-    while (1) {
+Void sensorTask(UArg arg0, UArg arg1)
+{
+	char string[126];
+	float ax, ay, az, gx, gy, gz;
 
-        // JTKJ: Teht�v� 2. Lue sensorilta dataa ja tulosta se Debug-ikkunaan
-        // JTKJ: Exercise 2. Read sensor data and print it to the Debug window
-    	i2cMPU = I2C_open(Board_I2C, &i2cMPUParams);
-    	if (i2cMPU == NULL)
-    	{
-    		        System_abort("Error Initializing I2CMPU\n");
-    	}
+	System_printf("Started sensorTask - function\n");
+	System_flush();
 
+	I2C_Handle i2cMPU;
+	I2C_Params i2cMPUParams;
+	I2C_Params_init(&i2cMPUParams);
+	i2cMPUParams.bitRate = I2C_400kHz;
+	i2cMPUParams.custom = (uintptr_t)&i2cMPUCfg;
 
-    	mpu9250_get_data(&i2cMPU, &ax, &ay, &az, &gx, &gy, &gz);
+	i2cMPU = I2C_open(Board_I2C, &i2cMPUParams);
+	// checks if opening Mpu is succesful
+	if (i2cMPU == NULL)
+	{
+		System_abort("Error Initializing I2CMPU\n");
+	}
 
-    	if( gx > 100 OR gy > 100 OR gx < -100 OR gy < -100)
-    	{
+	PIN_setOutputValue(hMpuPin,Board_MPU_POWER, Board_MPU_POWER_ON);
 
-    		sprintf(string,"%f,%f\n", gx, gy);
-    		System_printf(string);
-    		System_flush();
-    	}
+	// WAIT 100MS FOR THE SENSOR TO POWER UP
+	Task_sleep(100000 / Clock_tickPeriod);
+	System_printf("MPU9250: Power ON\n");
+	System_flush();
 
-    	if(gx > 100 && displayHandle)
-    	{
-    		Display_print0(displayHandle, 6, 5, "UP");
-    		Task_sleep(1000000/Clock_tickPeriod);
-    		Display_clear(displayHandle);
-    	}
+	System_printf("Started setting up MPU\n");
+	System_flush();
 
-    	else if(gx < -100 && displayHandle)
-    	{
-    		Display_print0(displayHandle, 6, 5, "DOWN");
-    	    Task_sleep(1000000/Clock_tickPeriod);
-    	    Display_clear(displayHandle);
-    	}
+	mpu9250_setup(&i2cMPU);
 
-    	else if(gy > 100 && displayHandle)
-    	{
-    		Display_print0(displayHandle, 6, 5, "RIGHT");
-    		Task_sleep(1000000/Clock_tickPeriod);
-    		Display_clear(displayHandle);
-    	}
+	System_printf("Mpu is ready now\n");
+	System_flush();
 
-    	else if(gy < -100 && displayHandle)
-    	{
-    		Display_print0(displayHandle, 6, 5, "LEFT");
-    	    Task_sleep(1000000/Clock_tickPeriod);
-    	    Display_clear(displayHandle);
-    	}
-    	else
-    	{
-    		Display_print0(displayHandle, 6, 0, "Just chilling...");
-    	}
+	I2C_close(i2cMPU);
 
-    	//sprintf(string, "%lf lux", lux);
-    	//System_printf(string);
-    	//System_flush();
+	while(1)
+	{
+		if(myState == READ_SENSOR)
+		{
+			i2cMPU = I2C_open(Board_I2C, &i2cMPUParams);
 
-    	//if (displayHandle)
-    	//{
-    	//	Display_print0(displayHandle, 1, 1, string);
+			mpu9250_get_data(&i2cMPU, &ax, &ay, &az, &gx, &gy, &gz);
+			sprintf(string, "x: %f, y: %f, z: %f\n", gx, gy, gz);
+			System_printf(string);
+			System_flush();
 
-    	    // Näytetään teksti 5s ajan
-    	//    Task_sleep(500000/Clock_tickPeriod);
+			if(gx > 50) {
+				move = UP;
+			}
+			else if(gx < -50)
+			{
+				move = DOWN;
+			}
+			else if(gy > 50)
+			{
+				move = RIGHT;
+			}
+			else if(gy < -50)
+			{
+				move = LEFT;
+			}
+			else
+			{
+				move = STILL;
+			}
+			myState = UPDATE;
+			I2C_close(i2cMPU);
 
-    	    // Tyhjennetään näyt1tö
-    	//    Display_clear(displayHandle);
-    	//}
+			Task_sleep(100000/Clock_tickPeriod);
+		}
+	}
+}
 
-    	//UART_read(uart, &input, 1);
+Void staleTask(UArg arg0, UArg arg1)
+{
+	if(myState == STALE)
+	{
+		System_printf("This is staleTask\n");
+		myState = READ_SENSOR;
+	}
+}
 
-    	// Kaiutetaan merkki takaisin
-    	//sprintf(echo_msg, "id:427,light=%lf\n", lux);
-    	//UART_write(uart, echo_msg, strlen(echo_msg));
+Void displayTask(UArg arg0, UArg arg1)
+{
+	//char disp_messages[10][10] = {"stay", "left", "right", "up", "down"};
+	//char str[5];
+	Display_Params params;
+	Display_Params_init(&params);
+	params.lineClearMode = DISPLAY_CLEAR_BOTH;
 
-    	// Once per second
-    	I2C_close(i2cMPU);
-    	Task_sleep(100000 / Clock_tickPeriod);
-    }
+	Display_Handle displayHandle = Display_open(Display_Type_LCD, &params);
+	while(1)
+	{
+		if(myState == UPDATE && displayHandle)
+		{
+		//	sprintf(str, "%s", disp_messages[move]);
+			if(move == LEFT)
+			{
+				Display_print0(displayHandle, 5, 3, "LEFT");
+				Task_sleep(1000000/Clock_tickPeriod);
+				Display_clear(displayHandle);
+
+			}
+			else if(move == RIGHT)
+			{
+				Display_print0(displayHandle, 5, 3, "RIGHT");
+				Task_sleep(1000000/Clock_tickPeriod);
+				Display_clear(displayHandle);
+
+			}
+			else if(move == UP)
+			{
+				Display_print0(displayHandle, 5, 3, "UP");
+				Task_sleep(1000000/Clock_tickPeriod);
+				Display_clear(displayHandle);
+
+			}
+			else if(move == DOWN)
+			{
+				Display_print0(displayHandle, 5, 3, "DOWN");
+				Task_sleep(1000000/Clock_tickPeriod);
+				Display_clear(displayHandle);
+			}
+			else
+			{
+				Display_print0(displayHandle, 5, 0, "I'm still standing");
+			}
+			//Print("%d\n", myState);
+			myState = READ_SENSOR;
+
+		}
+	}
 }
 
 /* Communication Task */
@@ -259,8 +272,14 @@ Void commTaskFxn(UArg arg0, UArg arg1) {
 Int main(void) {
 
     // Task variables
-	Task_Handle labTask;
+	Task_Handle defaultState;
+	Task_Params defaultStateParams;
+
+	Task_Handle sensorTaskVar;
 	Task_Params labTaskParams;
+
+	Task_Handle displayTaskVar;
+	Task_Params displayParams;
 	/*
 	Task_Handle commTask;
 	Task_Params commTaskParams;
@@ -268,43 +287,49 @@ Int main(void) {
 
     // Initialize board
     Board_initGeneral();
-
-    // JTKJ: Teht�v� 2. i2c-c�yl� k�ytt��n ohjelmassa
-    // JTKJ: Exercise 2. Use i2c bus in program
     Board_initI2C();
-    // JTKJ: Teht�v� 4. UART k�ytt��n ohjelmassa
-    // JTKJ: Exercise 4. Use UART in program
-    Board_initUART();
 
-    // JTKJ: Teht�v� 1. Painonappi- ja ledipinnit k�ytt��n t�ss�
-	// JTKJ: Exercise 1. Open and configure the button and led pins here
-    buttonHandle = PIN_open(&buttonState, buttonConfig);
-    if(!buttonHandle)
-    {
-    	System_abort("Error initializing button pins\n");
-    }
-    ledHandle = PIN_open(&ledState, ledConfig);
-    if(!ledHandle)
-    {
-    	System_abort("Error initializing LED pins\n");
-    }
-
-    // JTKJ: Teht�v� 1. Rekister�i painonapille keskeytyksen k�sittelij�funktio
-	// JTKJ: Exercise 1. Register the interrupt handler for the button
-    if (PIN_registerIntCb(buttonHandle, &buttonFxn) != 0)
-    {
-    	System_abort("Error registering button callback function");
-    }
 
     /* Task */
     Task_Params_init(&labTaskParams);
     labTaskParams.stackSize = STACKSIZE;
     labTaskParams.stack = &labTaskStack;
-    labTaskParams.priority=2;
+    labTaskParams.priority=3;
 
-    labTask = Task_create(labTaskFxn, &labTaskParams, NULL);
-    if (labTask == NULL) {
-    	System_abort("Task create failed!");
+    Task_Params_init(&defaultStateParams);
+    defaultStateParams.stackSize = STACKSIZE;
+    defaultStateParams.stack = &defaultStateStack;
+    defaultStateParams.priority = 1;
+
+    Task_Params_init(&displayParams);
+    displayParams.stackSize = STACKSIZE;
+    displayParams.stack = &displayStack;
+    displayParams.priority = 2;
+
+    System_printf("Starting tasks\n");
+    System_flush();
+
+    //labTask = Task_create(labTaskFxn, &labTaskParams, NULL);
+    //if (labTask == NULL) {
+    //	System_abort("Task create failed!");
+    //}
+
+    defaultState = Task_create(staleTask, &defaultStateParams, NULL);
+    if(defaultState == NULL)
+    {
+    	System_abort("Task create failed");
+    }
+
+    sensorTaskVar = Task_create(sensorTask, &labTaskParams, NULL);
+    if (sensorTaskVar == NULL)
+    {
+    	System_abort("Task create failed");
+    }
+
+    displayTaskVar = Task_create(displayTask, &displayParams, NULL);
+    if(displayTaskVar == NULL)
+    {
+    	System_abort("displayTask failed");
     }
 
     /* Communication Task */

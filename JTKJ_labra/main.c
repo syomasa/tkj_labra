@@ -21,17 +21,22 @@
 
 /* Board Header files */
 #include "Board.h"
+#include <kuva.h>
+#include "buzzer.h"
 
 #include "wireless/comm_lib.h"
 #include "sensors/opt3001.h"
 #include "sensors/mpu9250.h"
 
 /* Task */
+#define STALESTACK 512
 #define STACKSIZE 2048
 #define EDGE_VALUES 70
+#define MUSICSTACK 1024
 Char labTaskStack[STACKSIZE];
-Char defaultStateStack[STACKSIZE];
+Char defaultStateStack[STALESTACK];
 Char displayStack[STACKSIZE];
+Char musicTaskStack[MUSICSTACK];
 // Char commTaskStack[STACKSIZE];
 
 static PIN_Handle hMpuPin;
@@ -41,11 +46,17 @@ static PIN_Config MpuPinConfig[] = {
     PIN_TERMINATE
 };
 
+
+PIN_Config buzzerConfig[] =
+{
+    Board_BUZZER | PIN_GPIO_OUTPUT_EN | PIN_PULLUP,
+    PIN_TERMINATE
+};
+
 static const I2CCC26XX_I2CPinCfg i2cMPUCfg = {
     .pinSDA = Board_I2C0_SDA1,
     .pinSCL = Board_I2C0_SCL1
 };
-
 
 enum state{STALE, READ_SENSOR, UPDATE, NEW_MSG};
 enum state myState = STALE;
@@ -53,61 +64,7 @@ enum state myState = STALE;
 enum movement{STILL, LEFT, RIGHT, UP, DOWN};
 enum movement move = STILL;
 
-union Value {
-	int num;
-	char* str;
-	char c;
-	enum state;
-};
-
-void Print(char* format, union Value value)
-{
-	char str[20];
-	sprintf(str, format, value);
-	System_printf(str);
-	System_flush();
-}
 /* Task Functions */
-Void labTaskFxn(UArg arg0, UArg arg1) {
-
-	// Alustetaan näyttö taskin alussa!
-	Display_Params params;
-	Display_Params_init(&params);
-	params.lineClearMode = DISPLAY_CLEAR_BOTH;
-
-    Display_Handle displayHandle = Display_open(Display_Type_LCD, &params);
-
-    I2C_Handle i2cMPU;
-    I2C_Params i2cMPUParams;
-    I2C_Params_init(&i2cMPUParams);
-    i2cMPUParams.bitRate = I2C_400kHz;
-    i2cMPUParams.custom = (uintptr_t)&i2cMPUCfg;
-
-    i2cMPU = I2C_open(Board_I2C, &i2cMPUParams);
-    // checks if opening Mpu is succesful
-    if (i2cMPU == NULL)
-    {
-    	System_abort("Error Initializing I2CMPU\n");
-    }
-
-    PIN_setOutputValue(hMpuPin,Board_MPU_POWER, Board_MPU_POWER_ON);
-
-    // WAIT 100MS FOR THE SENSOR TO POWER UP
-    Task_sleep(100000 / Clock_tickPeriod);
-    System_printf("MPU9250: Power ON\n");
-    System_flush();
-
-
-    System_printf("Started setting up MPU\n");
-    System_flush();
-
-    mpu9250_setup(&i2cMPU);
-
-    System_printf("Mpu is ready now\n");
-    System_flush();
-
-    I2C_close(i2cMPU);
-}
 
 Void sensorTask(UArg arg0, UArg arg1)
 {
@@ -158,18 +115,18 @@ Void sensorTask(UArg arg0, UArg arg1)
 			System_printf(string);
 			System_flush();
 
-			if(gx > 50) {
+			if(gx > 80) {
 				move = UP;
 			}
-			else if(gx < -50)
+			else if(gx < -80)
 			{
 				move = DOWN;
 			}
-			else if(gy > 50)
+			else if(gy > 80)
 			{
 				move = RIGHT;
 			}
-			else if(gy < -50)
+			else if(gy < -80)
 			{
 				move = LEFT;
 			}
@@ -180,8 +137,9 @@ Void sensorTask(UArg arg0, UArg arg1)
 			myState = UPDATE;
 			I2C_close(i2cMPU);
 
-			Task_sleep(100000/Clock_tickPeriod);
+			
 		}
+		Task_sleep(100000/Clock_tickPeriod);
 	}
 }
 
@@ -196,52 +154,66 @@ Void staleTask(UArg arg0, UArg arg1)
 
 Void displayTask(UArg arg0, UArg arg1)
 {
+	Display_Params params;
+	Display_Params_init(&params);
+	params.lineClearMode = DISPLAY_CLEAR_BOTH;
+
+    Display_Handle displayHandle = Display_open(Display_Type_LCD, &params);
+
 	//char disp_messages[10][10] = {"stay", "left", "right", "up", "down"};
 	//char str[5];
 	Display_Params params;
 	Display_Params_init(&params);
 	params.lineClearMode = DISPLAY_CLEAR_BOTH;
-
 	Display_Handle displayHandle = Display_open(Display_Type_LCD, &params);
+	
 	while(1)
 	{
 		if(myState == UPDATE && displayHandle)
 		{
-		//	sprintf(str, "%s", disp_messages[move]);
-			if(move == LEFT)
+			tContext *pContext = DisplayExt_getGrlibContext(displayHandle);
+			if (pContext)
 			{
-				Display_print0(displayHandle, 5, 3, "LEFT");
-				Task_sleep(1000000/Clock_tickPeriod);
-				Display_clear(displayHandle);
+			//	sprintf(str, "%s", disp_messages[move]);
+				if(move == LEFT)
+				{
+					GrImageDraw(pContext, &arrowL, 0, 10);
+					GrFlush(pContext);
+					Task_sleep(1000000/Clock_tickPeriod);
+					Display_clear(displayHandle);
 
-			}
-			else if(move == RIGHT)
-			{
-				Display_print0(displayHandle, 5, 3, "RIGHT");
-				Task_sleep(1000000/Clock_tickPeriod);
-				Display_clear(displayHandle);
+				}
+				else if(move == RIGHT)
+				{
+					GrImageDraw(pContext, &arrowL, 0, 10);
+					GrFlush(pContext);
+					Task_sleep(1000000/Clock_tickPeriod);
+					Display_clear(displayHandle);
 
-			}
-			else if(move == UP)
-			{
-				Display_print0(displayHandle, 5, 3, "UP");
-				Task_sleep(1000000/Clock_tickPeriod);
-				Display_clear(displayHandle);
+				}
+				else if(move == UP)
+				{
+					GrImageDraw(pContext, &arrowL, 0, 10);
+					GrFlush(pContext);;
+					Task_sleep(1000000/Clock_tickPeriod);
+					Display_clear(displayHandle);
 
+				}
+				else if(move == DOWN)
+				{
+					GrImageDraw(pContext, &arrowL, 0, 10);
+					GrFlush(pContext);
+					Task_sleep(1000000/Clock_tickPeriod);
+					Display_clear(displayHandle);
+				}
+				else
+				{
+					Display_print0(displayHandle, 5, 0, "I'm still standing");
+					Task_sleep(1000000/Clock_tickPeriod);
+				}
+				//Print("%d\n", myState);
 			}
-			else if(move == DOWN)
-			{
-				Display_print0(displayHandle, 5, 3, "DOWN");
-				Task_sleep(1000000/Clock_tickPeriod);
-				Display_clear(displayHandle);
-			}
-			else
-			{
-				Display_print0(displayHandle, 5, 0, "I'm still standing");
-			}
-			//Print("%d\n", myState);
 			myState = READ_SENSOR;
-
 		}
 	}
 }
@@ -280,6 +252,9 @@ Int main(void) {
 
 	Task_Handle displayTaskVar;
 	Task_Params displayParams;
+
+	Task_Handle musicTaskVar;
+	Task_Params musicParams
 	/*
 	Task_Handle commTask;
 	Task_Params commTaskParams;
@@ -297,7 +272,7 @@ Int main(void) {
     labTaskParams.priority=3;
 
     Task_Params_init(&defaultStateParams);
-    defaultStateParams.stackSize = STACKSIZE;
+    defaultStateParams.stackSize = STALESTACK;
     defaultStateParams.stack = &defaultStateStack;
     defaultStateParams.priority = 1;
 
@@ -305,6 +280,16 @@ Int main(void) {
     displayParams.stackSize = STACKSIZE;
     displayParams.stack = &displayStack;
     displayParams.priority = 2;
+
+	Task_Params_init(&musicParams);
+    musicParams.stackSize = MUSICSTACK;
+    musicParams.stack = &musicTaskStack;
+    musicParams.priority = 2;
+
+	Task_Params_init(&commTaskParams);
+    commTaskParams.stackSize = STACKSIZE;
+    commTaskParams.stack = &commTaskStack;
+    commTaskParams.priority=1;
 
     System_printf("Starting tasks\n");
     System_flush();
@@ -331,15 +316,12 @@ Int main(void) {
     {
     	System_abort("displayTask failed");
     }
-
-    /* Communication Task */
-	/*
+	musicTaskVar = Task_create(musicTask, &musicParams, Null);
+	if(musicTaskVar == NULL)
+	{
+		System_abort("displayTask failed");
+	}
     Init6LoWPAN(); // This function call before use!
-
-    Task_Params_init(&commTaskParams);
-    commTaskParams.stackSize = STACKSIZE;
-    commTaskParams.stack = &commTaskStack;
-    commTaskParams.priority=1;
 
     commTask = Task_create(commTaskFxn, &commTaskParams, NULL);
     if (commTask == NULL) {

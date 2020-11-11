@@ -46,6 +46,9 @@ static PIN_Config MpuPinConfig[] = {
     PIN_TERMINATE
 };
 
+static PIN_Handle buzzer;
+static PIN_State buzzerState;
+
 
 PIN_Config buzzerConfig[] =
 {
@@ -209,6 +212,13 @@ Void displayTask(UArg arg0, UArg arg1)
 	}
 }
 
+Void musicTask(UArg arg0, UArg arg1)
+{
+	while(1)
+	{
+
+	}
+}
 /* Communication Task */
 /*
 Void commTaskFxn(UArg arg0, UArg arg1) {
@@ -254,6 +264,12 @@ Int main(void) {
     // Initialize board
     Board_initGeneral();
     Board_initI2C();
+
+    buzzer = PIN_open(&buzzerState, buzzerConfig);
+       if (buzzer == NULL)
+       {
+       	System_abort("Buzzer pin open failed!");
+       }
 
 
     /* Task */
@@ -307,11 +323,11 @@ Int main(void) {
     {
     	System_abort("displayTask failed");
     }
-	//musicTaskVar = Task_create(musicTask, &musicParams, Null);
-	//if(musicTaskVar == NULL)
-	//{
-	//	System_abort("displayTask failed");
-	//}
+	musicTaskVar = Task_create(musicTask, &musicParams, NULL);
+	if (musicTaskVar == NULL)
+	{
+		System_abort("musicTask failed");
+	}
     //Init6LoWPAN(); // This function call before use!
 
     //commTask = Task_create(commTaskFxn, &commTaskParams, NULL);

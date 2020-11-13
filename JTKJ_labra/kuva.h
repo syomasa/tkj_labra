@@ -14,6 +14,5 @@ extern const tImage arrowU;
 extern const tImage arrowD;
 extern const tImage arrowR;
 extern const tImage arrowL;
-extern const tImage gondola;
 
 #endif /* KUVA_H_ */

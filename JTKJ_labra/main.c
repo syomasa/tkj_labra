@@ -46,9 +46,6 @@ static PIN_Config MpuPinConfig[] = {
     PIN_TERMINATE
 };
 
-static PIN_Handle buzzer;
-static PIN_State buzzerState;
-
 
 PIN_Config buzzerConfig[] =
 {
@@ -118,8 +115,7 @@ Void sensorTask(UArg arg0, UArg arg1)
 			System_printf(string);
 			System_flush();
 
-			if(gx > 80)
-			{
+			if(gx > 80) {
 				move = UP;
 			}
 			else if(gx < -80)
@@ -143,7 +139,7 @@ Void sensorTask(UArg arg0, UArg arg1)
 
 			
 		}
-		Task_sleep(500000/Clock_tickPeriod);
+		Task_sleep(100000/Clock_tickPeriod);
 	}
 }
 
@@ -158,6 +154,12 @@ Void staleTask(UArg arg0, UArg arg1)
 
 Void displayTask(UArg arg0, UArg arg1)
 {
+	Display_Params params;
+	Display_Params_init(&params);
+	params.lineClearMode = DISPLAY_CLEAR_BOTH;
+
+    Display_Handle displayHandle = Display_open(Display_Type_LCD, &params);
+
 	//char disp_messages[10][10] = {"stay", "left", "right", "up", "down"};
 	//char str[5];
 	Display_Params params;
@@ -175,36 +177,39 @@ Void displayTask(UArg arg0, UArg arg1)
 			//	sprintf(str, "%s", disp_messages[move]);
 				if(move == LEFT)
 				{
-					GrImageDraw(pContext, &arrowL, 0, 0);
+					GrImageDraw(pContext, &arrowL, 0, 10);
 					GrFlush(pContext);
 					Task_sleep(1000000/Clock_tickPeriod);
+					Display_clear(displayHandle);
 
 				}
 				else if(move == RIGHT)
 				{
-					GrImageDraw(pContext, &arrowR, 0, 0);
+					GrImageDraw(pContext, &arrowL, 0, 10);
 					GrFlush(pContext);
 					Task_sleep(1000000/Clock_tickPeriod);
+					Display_clear(displayHandle);
 
 				}
 				else if(move == UP)
 				{
-					GrImageDraw(pContext, &arrowU, 0, 0);
+					GrImageDraw(pContext, &arrowL, 0, 10);
 					GrFlush(pContext);;
 					Task_sleep(1000000/Clock_tickPeriod);
+					Display_clear(displayHandle);
 
 				}
 				else if(move == DOWN)
 				{
-					GrImageDraw(pContext, &arrowD, 0, 0);
+					GrImageDraw(pContext, &arrowL, 0, 10);
 					GrFlush(pContext);
 					Task_sleep(1000000/Clock_tickPeriod);
+					Display_clear(displayHandle);
 				}
 				else
 				{
-					GrImageDraw(pContext, &gondola, 0, 0);
-					GrFlush(pContext);;
-					//Task_sleep(100000/Clock_tickPeriod);
+					Display_print0(displayHandle, 5, 0, "I'm still standing");
+					Task_sleep(1000000/Clock_tickPeriod);
 				}
 				//Print("%d\n", myState);
 			}
@@ -213,26 +218,6 @@ Void displayTask(UArg arg0, UArg arg1)
 	}
 }
 
-Void musicTask(UArg arg0, UArg arg1) {
-	while(1) {
-		if (myState != STALE) {
-		    buzzerOpen(buzzer);
-			buzzerSetFrequency(250); // d
-			Task_sleep(10000 / Clock_tickPeriod);
-			buzzerSetFrequency(400); // f
-			Task_sleep(10000 / Clock_tickPeriod);
-			buzzerSetFrequency(250); // d
-			Task_sleep(10000 / Clock_tickPeriod);
-			buzzerSetFrequency(400); // d
-			Task_sleep(10000 / Clock_tickPeriod);
-		    buzzerClose();
-			Task_sleep(10000 / Clock_tickPeriod);
-		}
-		else {
-			Task_sleep(10000 / Clock_tickPeriod);
-		}
-	}
-}
 /* Communication Task */
 /*
 Void commTaskFxn(UArg arg0, UArg arg1) {
@@ -269,7 +254,7 @@ Int main(void) {
 	Task_Params displayParams;
 
 	Task_Handle musicTaskVar;
-	Task_Params musicParams;
+	Task_Params musicParams
 	/*
 	Task_Handle commTask;
 	Task_Params commTaskParams;
@@ -278,12 +263,6 @@ Int main(void) {
     // Initialize board
     Board_initGeneral();
     Board_initI2C();
-
-    buzzer = PIN_open(&buzzerState, buzzerConfig);
-       if (buzzer == NULL)
-       {
-       	System_abort("Buzzer pin open failed!");
-       }
 
 
     /* Task */
@@ -307,10 +286,10 @@ Int main(void) {
     musicParams.stack = &musicTaskStack;
     musicParams.priority = 2;
 
-	//Task_Params_init(&commTaskParams);
-    //commTaskParams.stackSize = STACKSIZE;
-    //commTaskParams.stack = &commTaskStack;
-    //commTaskParams.priority=1;
+	Task_Params_init(&commTaskParams);
+    commTaskParams.stackSize = STACKSIZE;
+    commTaskParams.stack = &commTaskStack;
+    commTaskParams.priority=1;
 
     System_printf("Starting tasks\n");
     System_flush();
@@ -337,17 +316,18 @@ Int main(void) {
     {
     	System_abort("displayTask failed");
     }
-	musicTaskVar = Task_create(musicTask, &musicParams, NULL);
-	if (musicTaskVar == NULL)
+	musicTaskVar = Task_create(musicTask, &musicParams, Null);
+	if(musicTaskVar == NULL)
 	{
-		System_abort("musicTask failed");
+		System_abort("displayTask failed");
 	}
-    //Init6LoWPAN(); // This function call before use!
+    Init6LoWPAN(); // This function call before use!
 
-    //commTask = Task_create(commTaskFxn, &commTaskParams, NULL);
-    //if (commTask == NULL) {
-    //	System_abort("Task create failed!");
-    //}
+    commTask = Task_create(commTaskFxn, &commTaskParams, NULL);
+    if (commTask == NULL) {
+    	System_abort("Task create failed!");
+    }
+	*/
 
     /* Sanity check */
     System_printf("Hello world!\n");

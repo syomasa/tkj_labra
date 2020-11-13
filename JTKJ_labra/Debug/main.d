@@ -238,9 +238,6 @@ main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc
 main.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h
 main.obj: ../Board.h
 main.obj: ../CC2650STK.h
-main.obj: /home/student/workspace/JTKJ_labra/kuva.h
-main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/mw/grlib/grlib.h
-main.obj: ../buzzer.h
 main.obj: ../wireless/comm_lib.h
 main.obj: /home/student/workspace/JTKJ_labra/wireless/CWC_CC2650_154Drv.h
 main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/rf_data_entry.h
@@ -488,9 +485,6 @@ main.obj: ../sensors/mpu9250.h
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h: 
 ../Board.h: 
 ../CC2650STK.h: 
-/home/student/workspace/JTKJ_labra/kuva.h: 
-/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/mw/grlib/grlib.h: 
-../buzzer.h: 
 ../wireless/comm_lib.h: 
 /home/student/workspace/JTKJ_labra/wireless/CWC_CC2650_154Drv.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/rf_data_entry.h: 

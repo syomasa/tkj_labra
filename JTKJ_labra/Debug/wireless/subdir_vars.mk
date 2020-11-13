@@ -22,16 +22,16 @@ C_DEPS += \
 ./wireless/comm_lib.d 
 
 C_DEPS__QUOTED += \
-"wireless/CWC_CC2650_154Drv.d" \
-"wireless/CWC_IntegrTest.d" \
-"wireless/ERRORS.d" \
-"wireless/comm_lib.d" 
+"wireless\CWC_CC2650_154Drv.d" \
+"wireless\CWC_IntegrTest.d" \
+"wireless\ERRORS.d" \
+"wireless\comm_lib.d" 
 
 OBJS__QUOTED += \
-"wireless/CWC_CC2650_154Drv.obj" \
-"wireless/CWC_IntegrTest.obj" \
-"wireless/ERRORS.obj" \
-"wireless/comm_lib.obj" 
+"wireless\CWC_CC2650_154Drv.obj" \
+"wireless\CWC_IntegrTest.obj" \
+"wireless\ERRORS.obj" \
+"wireless\comm_lib.obj" 
 
 C_SRCS__QUOTED += \
 "../wireless/CWC_CC2650_154Drv.c" \

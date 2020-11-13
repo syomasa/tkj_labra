@@ -118,18 +118,19 @@ Void sensorTask(UArg arg0, UArg arg1)
 			System_printf(string);
 			System_flush();
 
-			if(gx > 60) {
+			if(gx > 80)
+			{
 				move = UP;
 			}
-			else if(gx < -60)
+			else if(gx < -80)
 			{
 				move = DOWN;
 			}
-			else if(gy > 60)
+			else if(gy > 80)
 			{
 				move = RIGHT;
 			}
-			else if(gy < -60)
+			else if(gy < -80)
 			{
 				move = LEFT;
 			}
@@ -142,7 +143,7 @@ Void sensorTask(UArg arg0, UArg arg1)
 
 			
 		}
-		Task_sleep(100000/Clock_tickPeriod);
+		Task_sleep(500000/Clock_tickPeriod);
 	}
 }
 
@@ -203,7 +204,7 @@ Void displayTask(UArg arg0, UArg arg1)
 				{
 					GrImageDraw(pContext, &gondola, 0, 0);
 					GrFlush(pContext);;
-					Task_sleep(100000/Clock_tickPeriod);
+					//Task_sleep(100000/Clock_tickPeriod);
 				}
 				//Print("%d\n", myState);
 			}
@@ -212,11 +213,24 @@ Void displayTask(UArg arg0, UArg arg1)
 	}
 }
 
-Void musicTask(UArg arg0, UArg arg1)
-{
-	while(1)
-	{
-
+Void musicTask(UArg arg0, UArg arg1) {
+	while(1) {
+		if (myState != STALE) {
+		    buzzerOpen(buzzer);
+			buzzerSetFrequency(250); // d
+			Task_sleep(10000 / Clock_tickPeriod);
+			buzzerSetFrequency(400); // f
+			Task_sleep(10000 / Clock_tickPeriod);
+			buzzerSetFrequency(250); // d
+			Task_sleep(10000 / Clock_tickPeriod);
+			buzzerSetFrequency(400); // d
+			Task_sleep(10000 / Clock_tickPeriod);
+		    buzzerClose();
+			Task_sleep(10000 / Clock_tickPeriod);
+		}
+		else {
+			Task_sleep(10000 / Clock_tickPeriod);
+		}
 	}
 }
 /* Communication Task */

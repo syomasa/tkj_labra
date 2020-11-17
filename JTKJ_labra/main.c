@@ -31,7 +31,7 @@
 /* Task */
 /* Task stacks */
 #define STALESTACK 512
-#define STACKSIZE 4096
+#define STACKSIZE 2048
 #define EDGE_VALUES 70
 #define MUSICSTACK 1024
 
@@ -39,7 +39,6 @@ Char labTaskStack[STACKSIZE];
 Char defaultStateStack[STALESTACK];
 Char displayStack[STACKSIZE];
 Char musicTaskStack[MUSICSTACK];
-Char menuTaskStack[MUSICSTACK];
 // Char commTaskStack[STACKSIZE];
 
 static PIN_Handle hMpuPin;
@@ -64,7 +63,7 @@ static const I2CCC26XX_I2CPinCfg i2cMPUCfg = {
     .pinSCL = Board_I2C0_SCL1
 };
 
-enum state{START, MAIN, READ_SENSOR, UPDATE, NEW_MSG};
+enum state{START, READ_SENSOR, UPDATE, NEW_MSG};
 enum state myState = START;
 
 enum movement{STILL, LEFT, RIGHT, UP, DOWN};
@@ -73,7 +72,9 @@ enum movement move = STILL;
 enum game{MENU, GAME};
 enum game gameState = MENU;
 
-int menu = 0;
+enum menu{PLAY, MUTE, QUIT};
+enum menu menuChoice = PLAY;
+
 
 /* Task Functions */
 
@@ -147,7 +148,7 @@ Void sensorTask(UArg arg0, UArg arg1)
 			I2C_close(i2cMPU);
 
 		}
-		myState = MAIN;
+		myState = UPDATE;
 		Task_sleep(200000/Clock_tickPeriod);
 	}
 }
@@ -160,6 +161,17 @@ Void staleTask(UArg arg0, UArg arg1)
 		myState = READ_SENSOR;
 	}
 
+}
+void setMenuState()
+{
+	if(menuChoice <= QUIT && move == LEFT && menuChoice != PLAY)
+	{
+		menuChoice--;
+	}
+	else if(move == RIGHT && menuChoice != QUIT)
+	{
+		menuChoice++;
+	}
 }
 
 Void displayTask(UArg arg0, UArg arg1)
@@ -216,25 +228,21 @@ Void displayTask(UArg arg0, UArg arg1)
 		}
 		else if(myState == UPDATE && displayHandle && gameState == MENU)
 		{
-			switch(menu)
+			setMenuState();
+			if(menuChoice == MUTE)
 			{
-			case 0:
-				Display_print0(displayHandle, 5, 5, "PLAY");
-				Task_sleep(1000000/Clock_tickPeriod);
-				break;
-
-			case 1:
 				Display_print0(displayHandle, 5, 5, "MUTE");
 				Task_sleep(1000000/Clock_tickPeriod);
-				break;
-
-			case 2:
+			}
+			else if(menuChoice == PLAY)
+			{
+				Display_print0(displayHandle, 5, 5, "PLAY");
+				Task_sleep(1000000/Clock_tickPeriod);
+			}
+			else if(menuChoice == QUIT)
+			{
 				Display_print0(displayHandle, 5, 5, "QUIT");
 				Task_sleep(1000000/Clock_tickPeriod);
-				break;
-
-			default:
-				break;
 			}
 		}
 		myState = READ_SENSOR;
@@ -242,7 +250,7 @@ Void displayTask(UArg arg0, UArg arg1)
 	}
 }
 
-Void menuTask(UArg arg0, UArg arg1)
+/*Void menuTask(UArg arg0, UArg arg1)
 {
 	// TODO: button make button to change state from MENU -> GAME
 	System_printf("Started menuTask\n");
@@ -265,7 +273,7 @@ Void menuTask(UArg arg0, UArg arg1)
 
 	}
 }
-
+*/
 Void musicTask(UArg arg0, UArg arg1) {
 	System_printf("started musicTask\n");
 	System_flush();
@@ -330,8 +338,8 @@ Int main(void) {
 	Task_Handle musicTaskVar;
 	Task_Params musicParams;
 
-	Task_Handle menuTaskVar;
-	Task_Params menuParams;
+	//Task_Handle menuTaskVar;
+	//Task_Params menuParams;
 
 	/*
 	Task_Handle commTask;
@@ -370,10 +378,10 @@ Int main(void) {
     musicParams.stack = &musicTaskStack;
     musicParams.priority = 1;
 
-    Task_Params_init(&menuParams);
+    /*Task_Params_init(&menuParams);
     menuParams.stackSize = MUSICSTACK;
     menuParams.stack = &menuTaskStack;
-    menuParams.priority = 2;
+    menuParams.priority = 2; */
 
 	//Task_Params_init(&commTaskParams);
     //commTaskParams.stackSize = STACKSIZE;
@@ -412,11 +420,12 @@ Int main(void) {
 		System_abort("musicTask failed");
 	}
 
-	menuTaskVar = Task_create(menuTask, &menuParams, NULL);
+	/*menuTaskVar = Task_create(menuTask, &menuParams, NULL);
 	if(menuTaskVar == NULL)
 	{
 		System_abort("menuTask failed");
 	}
+	*/
     //Init6LoWPAN(); // This function call before use!
 
     //commTask = Task_create(commTaskFxn, &commTaskParams, NULL);

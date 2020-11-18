@@ -1,7 +1,7 @@
 ******************************************************************************
                   TI ARM Linker Unix v15.12.1                  
 ******************************************************************************
->> Linked Tue Nov 17 15:30:47 2020
+>> Linked Tue Nov 17 16:15:35 2020
 
 OUTPUT FILE NAME:   <JTKJ_labra.out>
 ENTRY POINT SYMBOL: "ResetISR"  address: 0000742d

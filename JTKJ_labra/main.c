@@ -232,17 +232,17 @@ Void displayTask(UArg arg0, UArg arg1)
 			if(menuChoice == MUTE)
 			{
 				Display_print0(displayHandle, 5, 5, "MUTE");
-				Task_sleep(1000000/Clock_tickPeriod);
+				Task_sleep(500000/Clock_tickPeriod);
 			}
 			else if(menuChoice == PLAY)
 			{
 				Display_print0(displayHandle, 5, 5, "PLAY");
-				Task_sleep(1000000/Clock_tickPeriod);
+				Task_sleep(500000/Clock_tickPeriod);
 			}
 			else if(menuChoice == QUIT)
 			{
 				Display_print0(displayHandle, 5, 5, "QUIT");
-				Task_sleep(1000000/Clock_tickPeriod);
+				Task_sleep(500000/Clock_tickPeriod);
 			}
 		}
 		myState = READ_SENSOR;

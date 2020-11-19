@@ -80,12 +80,12 @@ sensors/tmp007.obj: /home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runti
 sensors/tmp007.obj: /home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/package/System_Module_GateProxy.h
 sensors/tmp007.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/string.h
 sensors/tmp007.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/linkage.h
-sensors/tmp007.obj: /home/student/tkj_labra/JTKJ_labra/Board.h
+sensors/tmp007.obj: /home/student/JTK_LABRA_GIT/JTKJ_labra/Board.h
 sensors/tmp007.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/Power.h
 sensors/tmp007.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/utils/List.h
 sensors/tmp007.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdbool.h
 sensors/tmp007.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h
-sensors/tmp007.obj: /home/student/tkj_labra/JTKJ_labra/CC2650STK.h
+sensors/tmp007.obj: /home/student/JTK_LABRA_GIT/JTKJ_labra/CC2650STK.h
 sensors/tmp007.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/PIN.h
 sensors/tmp007.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h
 sensors/tmp007.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/ioc.h
@@ -102,7 +102,7 @@ sensors/tmp007.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc
 sensors/tmp007.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/rom.h
 sensors/tmp007.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/gpio.h
 sensors/tmp007.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/inc/hw_gpio.h
-sensors/tmp007.obj: /home/student/tkj_labra/JTKJ_labra/sensors/tmp007.h
+sensors/tmp007.obj: /home/student/JTK_LABRA_GIT/JTKJ_labra/sensors/tmp007.h
 sensors/tmp007.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/I2C.h
 sensors/tmp007.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h
 
@@ -186,12 +186,12 @@ sensors/tmp007.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS
 /home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/package/System_Module_GateProxy.h: 
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/string.h: 
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/linkage.h: 
-/home/student/tkj_labra/JTKJ_labra/Board.h: 
+/home/student/JTK_LABRA_GIT/JTKJ_labra/Board.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/Power.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/utils/List.h: 
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdbool.h: 
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h: 
-/home/student/tkj_labra/JTKJ_labra/CC2650STK.h: 
+/home/student/JTK_LABRA_GIT/JTKJ_labra/CC2650STK.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/PIN.h: 
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/ioc.h: 
@@ -208,6 +208,6 @@ sensors/tmp007.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/rom.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/gpio.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/inc/hw_gpio.h: 
-/home/student/tkj_labra/JTKJ_labra/sensors/tmp007.h: 
+/home/student/JTK_LABRA_GIT/JTKJ_labra/sensors/tmp007.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/I2C.h: 
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h: 

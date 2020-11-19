@@ -1,6 +1,6 @@
 #
 # This file was generated based on the configuration script:
-#     /home/student/tkj_labra/JTKJ_labra/labra.cfg
+#     /home/student/JTK_LABRA_GIT/JTKJ_labra/labra.cfg
 #
 # This makefile may be included in other makefiles that need to build
 # the libraries containing the compiled source files generated as
@@ -14,7 +14,7 @@
 #
 # The absolute path to the generated source directory (at the time the
 # sources were generated) is:
-#    /home/student/tkj_labra/JTKJ_labra/src
+#    /home/student/JTK_LABRA_GIT/JTKJ_labra/src
 #
 GEN_SRC_DIR ?= ../src
 

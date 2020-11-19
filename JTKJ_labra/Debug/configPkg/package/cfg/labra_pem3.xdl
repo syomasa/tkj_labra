@@ -9,7 +9,7 @@
  */
 
 
--l"/home/student/tkj_labra/JTKJ_labra/Debug/configPkg/package/cfg/labra_pem3.oem3"
+-l"/home/student/JTK_LABRA_GIT/JTKJ_labra/Debug/configPkg/package/cfg/labra_pem3.oem3"
 -l"/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/mw/display/lib/display.aem3"
 -l"/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/mw/lcd/lib/lcd.aem3"
 -l"/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/mw/grlib/lib/grlib.aem3"
@@ -19,7 +19,7 @@
 -l"/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/pdm/lib/pdm_cc26xxware.aem3"
 -l"/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/mw/fatfs/lib/release/ti.mw.fatfs.aem3"
 -l"/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/ports/lib/tirtosport.aem3"
--l"/home/student/tkj_labra/JTKJ_labra/src/sysbios/rom_sysbios.aem3"
+-l"/home/student/JTK_LABRA_GIT/JTKJ_labra/src/sysbios/rom_sysbios.aem3"
 -l"/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/targets/arm/rtsarm/lib/boot.aem3"
 -l"/home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/targets/arm/rtsarm/lib/auto_init.aem3"
 

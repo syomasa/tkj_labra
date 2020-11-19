@@ -81,12 +81,12 @@ sensors/bmp280.obj: /home/student/ti/xdctools_3_32_00_06_core/packages/xdc/runti
 sensors/bmp280.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdio.h
 sensors/bmp280.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/linkage.h
 sensors/bmp280.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdarg.h
-sensors/bmp280.obj: /home/student/tkj_labra/JTKJ_labra/Board.h
+sensors/bmp280.obj: /home/student/JTK_LABRA_GIT/JTKJ_labra/Board.h
 sensors/bmp280.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/Power.h
 sensors/bmp280.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/utils/List.h
 sensors/bmp280.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdbool.h
 sensors/bmp280.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h
-sensors/bmp280.obj: /home/student/tkj_labra/JTKJ_labra/CC2650STK.h
+sensors/bmp280.obj: /home/student/JTK_LABRA_GIT/JTKJ_labra/CC2650STK.h
 sensors/bmp280.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/PIN.h
 sensors/bmp280.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h
 sensors/bmp280.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/ioc.h
@@ -103,7 +103,7 @@ sensors/bmp280.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc
 sensors/bmp280.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/rom.h
 sensors/bmp280.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/gpio.h
 sensors/bmp280.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/inc/hw_gpio.h
-sensors/bmp280.obj: /home/student/tkj_labra/JTKJ_labra/sensors/bmp280.h
+sensors/bmp280.obj: /home/student/JTK_LABRA_GIT/JTKJ_labra/sensors/bmp280.h
 sensors/bmp280.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/I2C.h
 sensors/bmp280.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h
 
@@ -188,12 +188,12 @@ sensors/bmp280.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdio.h: 
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/linkage.h: 
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdarg.h: 
-/home/student/tkj_labra/JTKJ_labra/Board.h: 
+/home/student/JTK_LABRA_GIT/JTKJ_labra/Board.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/Power.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/utils/List.h: 
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdbool.h: 
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h: 
-/home/student/tkj_labra/JTKJ_labra/CC2650STK.h: 
+/home/student/JTK_LABRA_GIT/JTKJ_labra/CC2650STK.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/PIN.h: 
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/ioc.h: 
@@ -210,6 +210,6 @@ sensors/bmp280.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/rom.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/gpio.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/inc/hw_gpio.h: 
-/home/student/tkj_labra/JTKJ_labra/sensors/bmp280.h: 
+/home/student/JTK_LABRA_GIT/JTKJ_labra/sensors/bmp280.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/I2C.h: 
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h: 

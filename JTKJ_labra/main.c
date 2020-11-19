@@ -21,7 +21,7 @@
 
 /* Board Header files */
 #include "Board.h"
-//#include "kuva.h"
+#include "kuva.h"
 #include "buzzer.h"
 
 #include "wireless/comm_lib.h"
@@ -65,7 +65,7 @@ static const I2CCC26XX_I2CPinCfg i2cMPUCfg = {
 };
 
 enum state{START, READ_SENSOR, UPDATE, NEW_MSG};
-enum state myState = START;
+enum state myState = UPDATE;
 
 enum movement{STILL, LEFT, RIGHT, UP, DOWN};
 enum movement move = STILL;
@@ -173,7 +173,7 @@ Void sensorTask(UArg arg0, UArg arg1)
 
 	}*/
 
-void setMenuState()
+void setMenuState(Display_Handle displayHandle,tContext *pContext)
 {
 	if(menuChoice <= QUIT && move == LEFT && menuChoice != PLAY)
 	{
@@ -182,6 +182,15 @@ void setMenuState()
 	else if(move == RIGHT && menuChoice != QUIT)
 	{
 		menuChoice++;
+	}
+	else if(move == UP && menuChoice == PLAY)
+	{
+		Display_clear(displayHandle);
+		gameState = GAME;
+		GrImageDraw(pContext, &gondola, 0, 0);
+		GrFlush(pContext);
+		Task_sleep(1000000 / Clock_tickPeriod);
+		//move = STILL;
 	}
 }
 
@@ -210,58 +219,61 @@ Void displayTask(UArg arg0, UArg arg1)
 				//	sprintf(str, "%s", disp_messages[move]);
 				if(move == LEFT)
 				{
-					Display_print0(displayHandle, 5, 5, "LEFT");
-					//GrImageDraw(pContext, &arrowL, 0, 0);
-					//GrFlush(pContext);
+					//Display_print0(displayHandle, 5, 5, "LEFT");
+					GrImageDraw(pContext, &arrowL, 0, 0);
+					GrFlush(pContext);
+					Task_sleep(1000000/Clock_tickPeriod);
+					GrImageDraw(pContext, &gondola, 0, 0);
+					GrFlush(pContext);
 
 				}
 				else if(move == RIGHT)
 				{
-					Display_print0(displayHandle, 5, 5, "RIGHT");
-					//GrImageDraw(pContext, &arrowR, 0, 0);
-					//GrFlush(pContext);
+					//Display_print0(displayHandle, 5, 5, "RIGHT");
+					GrImageDraw(pContext, &arrowR, 0, 0);
+					GrFlush(pContext);
+					Task_sleep(1000000/Clock_tickPeriod);
+					GrImageDraw(pContext, &gondola, 0, 0);
+					GrFlush(pContext);
 
 				}
 				else if(move == UP)
 				{
-					Display_print0(displayHandle, 5, 5, "UP");
-					//GrImageDraw(pContext, &arrowU, 0, 0);
-					//GrFlush(pContext);;
-
+					//Display_print0(displayHandle, 5, 5, "UP");
+					GrImageDraw(pContext, &arrowU, 0, 0);
+					GrFlush(pContext);;
+					Task_sleep(1000000/Clock_tickPeriod);
+					GrImageDraw(pContext, &gondola, 0, 0);
+					GrFlush(pContext);
 				}
 				else if(move == DOWN)
 				{
-					Display_print0(displayHandle, 5, 5, "DOWN");
-					//GrImageDraw(pContext, &arrowD, 0, 0);
-					//GrFlush(pContext);
+					// Display_print0(displayHandle, 5, 5, "DOWN");
+					GrImageDraw(pContext, &arrowD, 0, 0);
+					GrFlush(pContext);
+					Task_sleep(1000000/Clock_tickPeriod);
+					GrImageDraw(pContext, &gondola, 0, 0);
+					GrFlush(pContext);
+
 				}
 				else
 				{
-					//GrImageDraw(pContext, &gondola, 0, 0);
-					//GrFlush(pContext);;
-					//Task_sleep(100000/Clock_tickPeriod);
+					Display_clear(displayHandle);
 				}
 			}
 
 		}
 		else if(myState == UPDATE && displayHandle && gameState == MENU)
 		{
-			setMenuState();
-			if(menuChoice == MUTE)
+			if(menuChoice == PLAY)
 			{
-				Display_print0(displayHandle, 5, 5, "MUTE");
-				Task_sleep(1000000/Clock_tickPeriod);
-			}
-			else if(menuChoice == PLAY)
-			{
-				Display_print0(displayHandle, 5, 5, "PLAY");
-				Task_sleep(1000000/Clock_tickPeriod);
+				Display_print0(displayHandle, 5, 5, "PLAY ->");
 			}
 			else if(menuChoice == QUIT)
 			{
-				Display_print0(displayHandle, 5, 5, "QUIT");
-				Task_sleep(1000000/Clock_tickPeriod);
+				Display_print0(displayHandle, 5, 5, "<- QUIT");
 			}
+			setMenuState(displayHandle, pContext);
 		}
 		myState = READ_SENSOR;
 		// Vili: Tämä pitää olla tässä että toinen saman prioriteetin taski pääsee pyörimään (musiikki)
@@ -272,7 +284,7 @@ Void displayTask(UArg arg0, UArg arg1)
 
 /*Void menuTask(UArg arg0, UArg arg1)
 {
-	// TODO: button make button to change state from MENU -> GAME
+
 	System_printf("Started menuTask\n");
 	System_flush();
 	while(1)
@@ -298,7 +310,35 @@ Void musicTask(UArg arg0, UArg arg1) {
 	System_printf("started musicTask\n");
 	System_flush();
 	while(1) {
-		if (gameState == GAME) {
+		if(gameState == GAME && move == UP)
+		{
+			buzzerOpen(buzzer);
+			buzzerSetFrequency(350);
+			Task_sleep(2*10000 / Clock_tickPeriod);
+			buzzerClose();
+		}
+		else if(gameState == GAME && move == DOWN)
+		{
+			buzzerOpen(buzzer);
+			buzzerSetFrequency(350);
+			Task_sleep(2*10000 / Clock_tickPeriod);
+			buzzerClose();
+		}
+		else if(gameState == GAME && move == LEFT)
+		{
+			buzzerOpen(buzzer);
+			buzzerSetFrequency(350);
+			Task_sleep(2*10000 / Clock_tickPeriod);
+			buzzerClose();
+		}
+		else if(gameState == GAME && move == RIGHT)
+		{
+			buzzerOpen(buzzer);
+			buzzerSetFrequency(350);
+			Task_sleep(2*10000 / Clock_tickPeriod);
+			buzzerClose();
+		}
+		else if (gameState == GAME) {
 		//if (menuChoice == PLAY) { // Vili: Tällä voi kokeilla
 			buzzerOpen(buzzer);
 			buzzerSetFrequency(250); // d

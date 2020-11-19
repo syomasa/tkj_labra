@@ -152,11 +152,11 @@ sensors/mpu9250.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LT
 sensors/mpu9250.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h
 sensors/mpu9250.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Clock.h
 sensors/mpu9250.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/package/Clock_TimerProxy.h
-sensors/mpu9250.obj: /home/student/tkj_labra/JTKJ_labra/Board.h
+sensors/mpu9250.obj: /home/student/JTK_LABRA_GIT/JTKJ_labra/Board.h
 sensors/mpu9250.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/Power.h
 sensors/mpu9250.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/utils/List.h
 sensors/mpu9250.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h
-sensors/mpu9250.obj: /home/student/tkj_labra/JTKJ_labra/CC2650STK.h
+sensors/mpu9250.obj: /home/student/JTK_LABRA_GIT/JTKJ_labra/CC2650STK.h
 sensors/mpu9250.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/PIN.h
 sensors/mpu9250.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h
 sensors/mpu9250.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/ioc.h
@@ -173,7 +173,7 @@ sensors/mpu9250.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/c
 sensors/mpu9250.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/rom.h
 sensors/mpu9250.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/gpio.h
 sensors/mpu9250.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/inc/hw_gpio.h
-sensors/mpu9250.obj: /home/student/tkj_labra/JTKJ_labra/sensors/mpu9250.h
+sensors/mpu9250.obj: /home/student/JTK_LABRA_GIT/JTKJ_labra/sensors/mpu9250.h
 
 ../sensors/mpu9250.c: 
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/inttypes.h: 
@@ -327,11 +327,11 @@ sensors/mpu9250.obj: /home/student/tkj_labra/JTKJ_labra/sensors/mpu9250.h
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/Clock.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/package/Clock_TimerProxy.h: 
-/home/student/tkj_labra/JTKJ_labra/Board.h: 
+/home/student/JTK_LABRA_GIT/JTKJ_labra/Board.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/Power.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/utils/List.h: 
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h: 
-/home/student/tkj_labra/JTKJ_labra/CC2650STK.h: 
+/home/student/JTK_LABRA_GIT/JTKJ_labra/CC2650STK.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/PIN.h: 
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/ioc.h: 
@@ -348,4 +348,4 @@ sensors/mpu9250.obj: /home/student/tkj_labra/JTKJ_labra/sensors/mpu9250.h
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/rom.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/gpio.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/inc/hw_gpio.h: 
-/home/student/tkj_labra/JTKJ_labra/sensors/mpu9250.h: 
+/home/student/JTK_LABRA_GIT/JTKJ_labra/sensors/mpu9250.h: 

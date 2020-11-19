@@ -10945,7 +10945,7 @@ __o = __obj[988]
     __o['cfgArgs'] = null
     __o['cfgArgsEncoded'] = true
     __o['cfgHome'] = String(java.net.URLDecoder.decode('configPkg', 'UTF-8'))
-    __o['cfgScript'] = String(java.net.URLDecoder.decode('%2Fhome%2Fstudent%2Ftkj_labra%2FJTKJ_labra%2Flabra.cfg', 'UTF-8'))
+    __o['cfgScript'] = String(java.net.URLDecoder.decode('%2Fhome%2Fstudent%2FJTK_LABRA_GIT%2FJTKJ_labra%2Flabra.cfg', 'UTF-8'))
     __o['prelink'] = false
     __o['profile'] = String(java.net.URLDecoder.decode('release', 'UTF-8'))
     __o['releases'] = __obj[989.0]
@@ -11056,7 +11056,7 @@ __o = __obj[1001]  // ti.targets.arm.elf.M3/ccConfigOpts
 __o = __obj[1002]  // ti.targets.arm.elf.M3/ccOpts
     __o['$category'] = String(java.net.URLDecoder.decode('Struct', 'UTF-8'))
     __o['$name'] = String(java.net.URLDecoder.decode('ti.targets.arm.elf.M3%2FccOpts', 'UTF-8'))
-    __o['prefix'] = String(java.net.URLDecoder.decode('-mv7M3+--code_state%3D16+--float_support%3Dvfplib+-me+--include_path%3D%22%2Fhome%2Fstudent%2Ftkj_labra%2FJTKJ_labra%22+--include_path%3D%22%2Fhome%2Fstudent%2Fti%2Ftirtos_cc13xx_cc26xx_2_20_00_06%2Fproducts%2Fcc26xxware_2_24_02_17202%22+--include_path%3D%22%2Fhome%2Fstudent%2Fti%2Fccsv6%2Ftools%2Fcompiler%2Fti-cgt-arm_15.12.1.LTS%2Finclude%22+-g+--define%3Dccs+--diag_wrap%3Doff+--display_error_number+--diag_warning%3D225+--diag_warning%3D255+--gen_func_subsections%3Don+--abi%3Deabi+++-qq+-pdsw225', 'UTF-8'))
+    __o['prefix'] = String(java.net.URLDecoder.decode('-mv7M3+--code_state%3D16+--float_support%3Dvfplib+-me+--include_path%3D%22%2Fhome%2Fstudent%2FJTK_LABRA_GIT%2FJTKJ_labra%22+--include_path%3D%22%2Fhome%2Fstudent%2Fti%2Ftirtos_cc13xx_cc26xx_2_20_00_06%2Fproducts%2Fcc26xxware_2_24_02_17202%22+--include_path%3D%22%2Fhome%2Fstudent%2Fti%2Fccsv6%2Ftools%2Fcompiler%2Fti-cgt-arm_15.12.1.LTS%2Finclude%22+-g+--define%3Dccs+--diag_wrap%3Doff+--display_error_number+--diag_warning%3D225+--diag_warning%3D255+--gen_func_subsections%3Don+--abi%3Deabi+++-qq+-pdsw225', 'UTF-8'))
     __o['suffix'] = String(java.net.URLDecoder.decode('', 'UTF-8'))
 
 __o = __obj[1003]  // ti.targets.arm.elf.M3/compatibleSuffixes

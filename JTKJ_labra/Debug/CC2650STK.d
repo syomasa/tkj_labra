@@ -187,8 +187,8 @@ CC2650STK.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_
 CC2650STK.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/package/Clock_TimerProxy.h
 CC2650STK.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/udma.h
 CC2650STK.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/inc/hw_udma.h
-CC2650STK.obj: /home/student/tkj_labra/JTKJ_labra/Board.h
-CC2650STK.obj: /home/student/tkj_labra/JTKJ_labra/CC2650STK.h
+CC2650STK.obj: /home/student/JTK_LABRA_GIT/JTKJ_labra/Board.h
+CC2650STK.obj: /home/student/JTK_LABRA_GIT/JTKJ_labra/CC2650STK.h
 CC2650STK.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/UART.h
 CC2650STK.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h
 CC2650STK.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/uart/UARTCC26XX.h
@@ -467,8 +467,8 @@ CC2650STK.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/bios_6_46_00_23/packages/ti/sysbios/knl/package/Clock_TimerProxy.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/udma.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/inc/hw_udma.h: 
-/home/student/tkj_labra/JTKJ_labra/Board.h: 
-/home/student/tkj_labra/JTKJ_labra/CC2650STK.h: 
+/home/student/JTK_LABRA_GIT/JTKJ_labra/Board.h: 
+/home/student/JTK_LABRA_GIT/JTKJ_labra/CC2650STK.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/UART.h: 
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/drivers/uart/UARTCC26XX.h: 

@@ -242,11 +242,11 @@ main.obj: ../kuva.h
 main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/mw/grlib/grlib.h
 main.obj: ../buzzer.h
 main.obj: ../wireless/comm_lib.h
-main.obj: /home/student/tkj_labra/JTKJ_labra/wireless/CWC_CC2650_154Drv.h
+main.obj: /home/student/JTK_LABRA_GIT/JTKJ_labra/wireless/CWC_CC2650_154Drv.h
 main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/rf_data_entry.h
 main.obj: /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/rf_mailbox.h
 main.obj: /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/string.h
-main.obj: /home/student/tkj_labra/JTKJ_labra/wireless/address.h
+main.obj: /home/student/JTK_LABRA_GIT/JTKJ_labra/wireless/address.h
 main.obj: ../sensors/opt3001.h
 main.obj: ../sensors/mpu9250.h
 
@@ -492,10 +492,10 @@ main.obj: ../sensors/mpu9250.h
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/tidrivers_cc13xx_cc26xx_2_20_00_08/packages/ti/mw/grlib/grlib.h: 
 ../buzzer.h: 
 ../wireless/comm_lib.h: 
-/home/student/tkj_labra/JTKJ_labra/wireless/CWC_CC2650_154Drv.h: 
+/home/student/JTK_LABRA_GIT/JTKJ_labra/wireless/CWC_CC2650_154Drv.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/rf_data_entry.h: 
 /home/student/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/rf_mailbox.h: 
 /home/student/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/string.h: 
-/home/student/tkj_labra/JTKJ_labra/wireless/address.h: 
+/home/student/JTK_LABRA_GIT/JTKJ_labra/wireless/address.h: 
 ../sensors/opt3001.h: 
 ../sensors/mpu9250.h: 

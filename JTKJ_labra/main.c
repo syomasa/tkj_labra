@@ -28,18 +28,17 @@
 #include "sensors/opt3001.h"
 #include "sensors/mpu9250.h"
 
+#define DEBUG_MUSIC 0
 /* Task */
 /* Task stacks */
 #define STALESTACK 512
 #define STACKSIZE 2048
-#define EDGE_VALUES 70
 #define MUSICSTACK 1024
 
 Char labTaskStack[STACKSIZE];
-//Char defaultStateStack[STALESTACK];
 Char displayStack[STACKSIZE];
 Char musicTaskStack[MUSICSTACK];
-// Char commTaskStack[STACKSIZE];
+Char commTaskStack[STACKSIZE];
 
 static PIN_Handle hMpuPin;
 static PIN_State MpuPinState;
@@ -173,6 +172,12 @@ Void sensorTask(UArg arg0, UArg arg1)
 
 	}*/
 
+void sendMsg(char* msg)
+{
+	Send6LoWPAN(IEEE80154_SERVER_ADDR, msg, strlen(msg));
+	StartReceive6LoWPAN();
+}
+
 void setMenuState(Display_Handle displayHandle,tContext *pContext)
 {
 	if(menuChoice <= QUIT && move == LEFT && menuChoice != PLAY)
@@ -245,6 +250,7 @@ Void displayTask(UArg arg0, UArg arg1)
 					Task_sleep(1000000/Clock_tickPeriod);
 					GrImageDraw(pContext, &gondola, 0, 0);
 					GrFlush(pContext);
+					sendMsg("event:UP");
 				}
 				else if(move == DOWN)
 				{
@@ -309,7 +315,7 @@ Void displayTask(UArg arg0, UArg arg1)
 Void musicTask(UArg arg0, UArg arg1) {
 	System_printf("started musicTask\n");
 	System_flush();
-	while(1) {
+	while(DEBUG_MUSIC) {
 		if(gameState == GAME && move == UP)
 		{
 			buzzerOpen(buzzer);
@@ -362,27 +368,31 @@ Void musicTask(UArg arg0, UArg arg1) {
 	}
 }
 /* Communication Task */
-/*
 Void commTaskFxn(UArg arg0, UArg arg1) {
 
 	// Radio to receive mode
+	char msg[16];
+	uint16_t sendrAddr;
+
 	int32_t result = StartReceive6LoWPAN();
 	if(result != true) {
 		System_abort("Wireless receive mode failed");
 	}
 
-	while (1) {
-
+	while (gameState == GAME)
+	{
 		// If true, we have a message
-		if (GetRXFlag() == true) {
+		if (GetRXFlag() == true)
+		{
+			memset(msg, 0, 16);
+			Receive6LoWPAN(&sendrAddr, msg, 16);
 
-			// Handle the received message..
+			System_printf(msg);
+			System_flush();
 		}
-
 		// Absolutely NO Task_sleep in this task!!
 	}
 }
-*/
 
 Int main(void) {
 
@@ -402,10 +412,8 @@ Int main(void) {
 	//Task_Handle menuTaskVar;
 	//Task_Params menuParams;
 
-	/*
-		 Task_Handle commTask;
-		 Task_Params commTaskParams;
-	 */
+	Task_Handle commTask;
+	Task_Params commTaskParams;
 
 	// Initialize board
 	Board_initGeneral();
@@ -427,56 +435,34 @@ Int main(void) {
 	Task_Params_init(&labTaskParams);
 	labTaskParams.stackSize = STACKSIZE;
 	labTaskParams.stack = &labTaskStack;
-	labTaskParams.priority = 3;
+	labTaskParams.priority = 2;
 
-	/*
-	Task_Params_init(&defaultStateParams);
-	defaultStateParams.stackSize = STALESTACK;
-	defaultStateParams.stack = &defaultStateStack;
-	defaultStateParams.priority = 3;
-	 */
 
 	Task_Params_init(&displayParams);
 	displayParams.stackSize = STACKSIZE;
 	displayParams.stack = &displayStack;
-	displayParams.priority = 1;
+	displayParams.priority = 2;
 
 	Task_Params_init(&musicParams);
 	musicParams.stackSize = MUSICSTACK;
 	musicParams.stack = &musicTaskStack;
-	musicParams.priority = 1;
+	musicParams.priority = 2;
 
-	/*Task_Params_init(&menuParams);
-		menuParams.stackSize = MUSICSTACK;
-		menuParams.stack = &menuTaskStack;
-		menuParams.priority = 2; */
-
-	//Task_Params_init(&commTaskParams);
-	//commTaskParams.stackSize = STACKSIZE;
-	//commTaskParams.stack = &commTaskStack;
-	//commTaskParams.priority=1;
+	Task_Params_init(&commTaskParams);
+	commTaskParams.stackSize = STACKSIZE;
+	commTaskParams.stack = &commTaskStack;
+	commTaskParams.priority=1;
 
 	System_printf("Starting tasks\n");
 	System_flush();
-
-	//labTask = Task_create(labTaskFxn, &labTaskParams, NULL);
-	//if (labTask == NULL) {
-	//	System_abort("Task create failed!");
-	//}
-
-	/*
-	defaultState = Task_create(staleTask, &defaultStateParams, NULL);
-	if(defaultState == NULL)
-	{
-		System_abort("Task create failed");
-	}
-	*/
 
 	sensorTaskVar = Task_create(sensorTask, &labTaskParams, NULL);
 	if (sensorTaskVar == NULL)
 	{
 		System_abort("Task create failed");
 	}
+
+	Init6LoWPAN(); // This function call before use!
 
 	displayTaskVar = Task_create(displayTask, &displayParams, NULL);
 	if(displayTaskVar == NULL)
@@ -490,19 +476,13 @@ Int main(void) {
 		System_abort("musicTask failed");
 	}
 
-	/*menuTaskVar = Task_create(menuTask, &menuParams, NULL);
-		if(menuTaskVar == NULL)
-		{
-		System_abort("menuTask failed");
-		}
-	 */
-	//Init6LoWPAN(); // This function call before use!
+	commTask = Task_create(commTaskFxn, &commTaskParams, NULL);
+	if (commTask == NULL)
+	{
+		System_abort("Task create failed!");
+	}
 
-	//commTask = Task_create(commTaskFxn, &commTaskParams, NULL);
-	//if (commTask == NULL) {
-	//	System_abort("Task create failed!");
-	//}
-
+	sendMsg("event:LEFT");
 	/* Sanity check */
 	System_printf("Hello world!\n");
 	System_flush();

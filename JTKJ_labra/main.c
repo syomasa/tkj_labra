@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 /* XDCtools files */
 #include <xdc/std.h>
@@ -29,6 +30,8 @@
 #include "sensors/mpu9250.h"
 
 #define DEBUG_MUSIC 0
+#define TEST_SEND 0
+#define OR ||
 /* Task */
 /* Task stacks */
 #define STALESTACK 512
@@ -69,11 +72,12 @@ enum state myState = UPDATE;
 enum movement{STILL, LEFT, RIGHT, UP, DOWN};
 enum movement move = STILL;
 
-enum game{MENU, GAME};
+enum game{MENU, GAME, WIN, LOSE};
 enum game gameState = MENU;
 
-enum menu{PLAY, MUTE, QUIT};
+enum menu{PLAY, QUIT};
 enum menu menuChoice = PLAY;
+
 
 
 /* Task Functions */
@@ -149,6 +153,10 @@ Void sensorTask(UArg arg0, UArg arg1)
 				move = LEFT;
 				myState = UPDATE;
 			}
+			else  if(gameState == WIN || gameState == LOSE)
+			{
+				myState = UPDATE;
+			}
 			else
 			{
 				move = STILL;
@@ -176,6 +184,8 @@ void sendMsg(char* msg)
 {
 	Send6LoWPAN(IEEE80154_SERVER_ADDR, msg, strlen(msg));
 	StartReceive6LoWPAN();
+	//System_printf(msg);
+	//System_flush();
 }
 
 void setMenuState(Display_Handle displayHandle,tContext *pContext)
@@ -225,6 +235,7 @@ Void displayTask(UArg arg0, UArg arg1)
 				if(move == LEFT)
 				{
 					//Display_print0(displayHandle, 5, 5, "LEFT");
+					sendMsg("event:LEFT");
 					GrImageDraw(pContext, &arrowL, 0, 0);
 					GrFlush(pContext);
 					Task_sleep(1000000/Clock_tickPeriod);
@@ -235,6 +246,7 @@ Void displayTask(UArg arg0, UArg arg1)
 				else if(move == RIGHT)
 				{
 					//Display_print0(displayHandle, 5, 5, "RIGHT");
+					sendMsg("event:RIGHT");
 					GrImageDraw(pContext, &arrowR, 0, 0);
 					GrFlush(pContext);
 					Task_sleep(1000000/Clock_tickPeriod);
@@ -245,16 +257,17 @@ Void displayTask(UArg arg0, UArg arg1)
 				else if(move == UP)
 				{
 					//Display_print0(displayHandle, 5, 5, "UP");
+					sendMsg("event:UP");
 					GrImageDraw(pContext, &arrowU, 0, 0);
 					GrFlush(pContext);;
 					Task_sleep(1000000/Clock_tickPeriod);
 					GrImageDraw(pContext, &gondola, 0, 0);
 					GrFlush(pContext);
-					sendMsg("event:UP");
 				}
 				else if(move == DOWN)
 				{
 					// Display_print0(displayHandle, 5, 5, "DOWN");
+					sendMsg("event:DOWN");
 					GrImageDraw(pContext, &arrowD, 0, 0);
 					GrFlush(pContext);
 					Task_sleep(1000000/Clock_tickPeriod);
@@ -280,6 +293,20 @@ Void displayTask(UArg arg0, UArg arg1)
 				Display_print0(displayHandle, 5, 5, "<- QUIT");
 			}
 			setMenuState(displayHandle, pContext);
+		}
+		else if(myState == UPDATE && displayHandle && gameState == WIN)
+		{
+			Display_clear(displayHandle);
+			Display_print0(displayHandle, 5, 5, "You won");
+			Task_sleep(2 * 1000000 / Clock_tickPeriod);
+			gameState = MENU;
+		}
+		else if(myState == UPDATE && displayHandle && gameState == LOSE)
+		{
+			Display_clear(displayHandle);
+			Display_print0(displayHandle, 5, 5, "You lose");
+			Task_sleep(2 * 1000000 / Clock_tickPeriod);
+			gameState = MENU;
 		}
 		myState = READ_SENSOR;
 		// Vili: Tämä pitää olla tässä että toinen saman prioriteetin taski pääsee pyörimään (musiikki)
@@ -372,23 +399,53 @@ Void commTaskFxn(UArg arg0, UArg arg1) {
 
 	// Radio to receive mode
 	char msg[16];
+	char* ptr_parse;
+	char test_var[64];
 	uint16_t sendrAddr;
+	System_printf("Started comTask\n");
+	System_flush();
 
 	int32_t result = StartReceive6LoWPAN();
 	if(result != true) {
 		System_abort("Wireless receive mode failed");
 	}
 
-	while (gameState == GAME)
+	while (1)
 	{
 		// If true, we have a message
-		if (GetRXFlag() == true)
+		if (GetRXFlag() == true && gameState == GAME) // gameState == GAME
 		{
 			memset(msg, 0, 16);
 			Receive6LoWPAN(&sendrAddr, msg, 16);
 
-			System_printf(msg);
-			System_flush();
+			ptr_parse = strtok(msg, ",");
+
+			if(atoi(ptr_parse) == 427)
+			{
+				ptr_parse = strtok(NULL, ",");
+				int val = strcmp(ptr_parse, "WIN");
+				int val2 = strcmp(ptr_parse, "LOST GAME");
+
+				sprintf(test_var, "Win comparison: %d\nLose comparison: %d\n", val, val2);
+				if(strcmp(ptr_parse, "WIN") == 0)
+				{
+					gameState = WIN;
+				}
+				else if(strcmp(ptr_parse, "LOST GAME") == 0)
+				{
+					gameState = LOSE;
+				}
+				else
+				{
+					gameState = GAME;
+				}
+				System_printf(test_var);
+				System_flush();
+
+			}
+
+
+
 		}
 		// Absolutely NO Task_sleep in this task!!
 	}
@@ -482,7 +539,6 @@ Int main(void) {
 		System_abort("Task create failed!");
 	}
 
-	sendMsg("event:LEFT");
 	/* Sanity check */
 	System_printf("Hello world!\n");
 	System_flush();

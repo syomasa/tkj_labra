@@ -78,8 +78,6 @@ enum game gameState = MENU;
 enum menu{PLAY, QUIT};
 enum menu menuChoice = PLAY;
 
-
-
 /* Task Functions */
 
 Void sensorTask(UArg arg0, UArg arg1)
@@ -153,7 +151,7 @@ Void sensorTask(UArg arg0, UArg arg1)
 				move = LEFT;
 				myState = UPDATE;
 			}
-			else  if(gameState == WIN || gameState == LOSE)
+			else if(gameState==WIN || gameState==LOSE)
 			{
 				myState = UPDATE;
 			}
@@ -164,6 +162,7 @@ Void sensorTask(UArg arg0, UArg arg1)
 			I2C_close(i2cMPU);
 
 		}
+
 		Task_sleep(100000/Clock_tickPeriod);
 	}
 }
@@ -204,7 +203,8 @@ void setMenuState(Display_Handle displayHandle,tContext *pContext)
 		gameState = GAME;
 		GrImageDraw(pContext, &gondola, 0, 0);
 		GrFlush(pContext);
-		Task_sleep(1000000 / Clock_tickPeriod);
+		Display_print0(displayHandle, 0, 12, "QUIT");
+		Task_sleep(1000000 / Clock_tickPeriod); // Odottaa sekunnin vähentää vahinko liikeitä peliä aloittaessa
 		//move = STILL;
 	}
 }
@@ -241,6 +241,7 @@ Void displayTask(UArg arg0, UArg arg1)
 					Task_sleep(1000000/Clock_tickPeriod);
 					GrImageDraw(pContext, &gondola, 0, 0);
 					GrFlush(pContext);
+					Display_print0(displayHandle, 0, 12, "QUIT");
 
 				}
 				else if(move == RIGHT)
@@ -252,6 +253,7 @@ Void displayTask(UArg arg0, UArg arg1)
 					Task_sleep(1000000/Clock_tickPeriod);
 					GrImageDraw(pContext, &gondola, 0, 0);
 					GrFlush(pContext);
+					Display_print0(displayHandle, 0, 12, "QUIT");
 
 				}
 				else if(move == UP)
@@ -263,6 +265,8 @@ Void displayTask(UArg arg0, UArg arg1)
 					Task_sleep(1000000/Clock_tickPeriod);
 					GrImageDraw(pContext, &gondola, 0, 0);
 					GrFlush(pContext);
+					Display_print0(displayHandle, 0, 12, "QUIT");
+
 				}
 				else if(move == DOWN)
 				{
@@ -273,6 +277,7 @@ Void displayTask(UArg arg0, UArg arg1)
 					Task_sleep(1000000/Clock_tickPeriod);
 					GrImageDraw(pContext, &gondola, 0, 0);
 					GrFlush(pContext);
+					Display_print0(displayHandle, 0, 12, "QUIT");
 
 				}
 				else
@@ -296,17 +301,19 @@ Void displayTask(UArg arg0, UArg arg1)
 		}
 		else if(myState == UPDATE && displayHandle && gameState == WIN)
 		{
-			Display_clear(displayHandle);
 			Display_print0(displayHandle, 5, 5, "You won");
-			Task_sleep(2 * 1000000 / Clock_tickPeriod);
 			gameState = MENU;
+			Task_sleep(3 * 1000000 / Clock_tickPeriod);
+			Display_clear(displayHandle);
+			continue;
 		}
 		else if(myState == UPDATE && displayHandle && gameState == LOSE)
 		{
-			Display_clear(displayHandle);
 			Display_print0(displayHandle, 5, 5, "You lose");
-			Task_sleep(2 * 1000000 / Clock_tickPeriod);
 			gameState = MENU;
+			Task_sleep(3 * 1000000 / Clock_tickPeriod);
+			Display_clear(displayHandle);
+			continue;
 		}
 		myState = READ_SENSOR;
 		// Vili: Tämä pitää olla tässä että toinen saman prioriteetin taski pääsee pyörimään (musiikki)
@@ -400,7 +407,7 @@ Void commTaskFxn(UArg arg0, UArg arg1) {
 	// Radio to receive mode
 	char msg[16];
 	char* ptr_parse;
-	char test_var[64];
+	//char test_var[64];
 	uint16_t sendrAddr;
 	System_printf("Started comTask\n");
 	System_flush();
@@ -426,7 +433,7 @@ Void commTaskFxn(UArg arg0, UArg arg1) {
 				int val = strcmp(ptr_parse, "WIN");
 				int val2 = strcmp(ptr_parse, "LOST GAME");
 
-				sprintf(test_var, "Win comparison: %d\nLose comparison: %d\n", val, val2);
+				//sprintf(test_var, "Win comparison: %d\nLose comparison: %d\n", val, val2);
 				if(strcmp(ptr_parse, "WIN") == 0)
 				{
 					gameState = WIN;
@@ -435,13 +442,8 @@ Void commTaskFxn(UArg arg0, UArg arg1) {
 				{
 					gameState = LOSE;
 				}
-				else
-				{
-					gameState = GAME;
-				}
-				System_printf(test_var);
-				System_flush();
-
+				//System_printf(test_var);
+				//System_flush();
 			}
 
 

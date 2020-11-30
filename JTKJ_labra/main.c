@@ -53,6 +53,8 @@ static PIN_Config MpuPinConfig[] = {
 static PIN_Handle buzzer;
 static PIN_State buzzerState;
 
+static PIN_Handle buttonHandle;
+static PIN_State buttonState;
 
 PIN_Config buzzerConfig[] =
 {
@@ -60,6 +62,12 @@ PIN_Config buzzerConfig[] =
 	Board_BUZZER     | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL | PIN_DRVSTR_MAX,
 	PIN_TERMINATE
 };
+
+PIN_Config buttonConfig[] = {
+   Board_BUTTON0  | PIN_INPUT_EN | PIN_PULLUP | PIN_IRQ_NEGEDGE, // Hox! TAI-operaatio
+   PIN_TERMINATE // Määritys lopetetaan aina tähän vakioon
+};
+
 
 static const I2CCC26XX_I2CPinCfg i2cMPUCfg = {
 	.pinSDA = Board_I2C0_SDA1,
@@ -380,18 +388,63 @@ Void musicTask(UArg arg0, UArg arg1) {
 		}
 		else if (gameState == GAME) {
 		//if (menuChoice == PLAY) { // Vili: Tällä voi kokeilla
+
 			buzzerOpen(buzzer);
-			buzzerSetFrequency(250); // d
-			Task_sleep(10000 / Clock_tickPeriod);
+			buzzerSetFrequency(750); // d
+			Task_sleep(2*100000 / Clock_tickPeriod);
+			buzzerClose();
+			Task_sleep(100000 / Clock_tickPeriod);
 
-			buzzerSetFrequency(400); // f
-			Task_sleep(10000 / Clock_tickPeriod);
+			buzzerOpen(buzzer);
+			buzzerSetFrequency(750); // d
+			Task_sleep(2*100000 / Clock_tickPeriod);
+			buzzerClose();
+			Task_sleep(100000 / Clock_tickPeriod);
 
-			buzzerSetFrequency(250); // d
-			Task_sleep(10000 / Clock_tickPeriod);
+			buzzerOpen(buzzer);
+			buzzerSetFrequency(750);
+			Task_sleep(2*100000 / Clock_tickPeriod);
 
-			buzzerSetFrequency(400); // d
-			Task_sleep(10000 / Clock_tickPeriod);
+			buzzerSetFrequency(1250);
+			Task_sleep(1000000 / Clock_tickPeriod);
+
+			buzzerSetFrequency(1000);
+			Task_sleep(2*100000 / Clock_tickPeriod);
+			buzzerClose();
+			Task_sleep(100000 / Clock_tickPeriod);
+
+			buzzerOpen(buzzer);
+			buzzerSetFrequency(1000);
+			Task_sleep(2*100000 / Clock_tickPeriod);
+			buzzerClose();
+			Task_sleep(100000 / Clock_tickPeriod);
+
+			buzzerOpen(buzzer);
+			buzzerSetFrequency(1000);
+
+			buzzerSetFrequency(1500);
+			Task_sleep(1000000 / Clock_tickPeriod);
+
+			buzzerSetFrequency(1250);
+			Task_sleep(2*100000 / Clock_tickPeriod);
+			buzzerClose();
+			Task_sleep(100000 / Clock_tickPeriod);
+
+			buzzerOpen(buzzer);
+			buzzerSetFrequency(1250);
+			Task_sleep(2*100000 / Clock_tickPeriod);
+
+			buzzerSetFrequency(1000);
+			Task_sleep(2*100000 / Clock_tickPeriod);
+			buzzerClose();
+			Task_sleep(100000 / Clock_tickPeriod);
+
+			buzzerOpen(buzzer);
+			buzzerSetFrequency(1000);
+			Task_sleep(2*100000 / Clock_tickPeriod);
+
+			buzzerSetFrequency(750);
+			Task_sleep(5*100000 / Clock_tickPeriod);
 
 			buzzerClose();
 			Task_sleep(10000 / Clock_tickPeriod);
@@ -453,6 +506,10 @@ Void commTaskFxn(UArg arg0, UArg arg1) {
 	}
 }
 
+void buttonFxn(PIN_Handle handle, PIN_Id pinId)
+{
+
+}
 Int main(void) {
 
 	// Task variables

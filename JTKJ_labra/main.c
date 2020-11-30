@@ -56,6 +56,9 @@ static PIN_State buzzerState;
 static PIN_Handle buttonHandle;
 static PIN_State buttonState;
 
+static PIN_Handle button1Handle;
+static PIN_State button1State;
+
 PIN_Config buzzerConfig[] =
 {
 	// Vili: Tämä rivi on CC2650STK.c:stä
@@ -64,8 +67,13 @@ PIN_Config buzzerConfig[] =
 };
 
 PIN_Config buttonConfig[] = {
-   Board_BUTTON0  | PIN_INPUT_EN | PIN_PULLUP | PIN_IRQ_NEGEDGE, // Hox! TAI-operaatio
-   PIN_TERMINATE // Määritys lopetetaan aina tähän vakioon
+		Board_BUTTON0  | PIN_INPUT_EN | PIN_PULLUP | PIN_IRQ_NEGEDGE, // Hox! TAI-operaatio
+		PIN_TERMINATE // Määritys lopetetaan aina tähän vakioon
+};
+
+PIN_Config button1Config[] = {
+		Board_BUTTON1  | PIN_INPUT_EN | PIN_PULLUP | PIN_IRQ_NEGEDGE, // Hox! TAI-operaatio
+		PIN_TERMINATE
 };
 
 
@@ -77,7 +85,7 @@ static const I2CCC26XX_I2CPinCfg i2cMPUCfg = {
 enum state{START, READ_SENSOR, UPDATE, NEW_MSG};
 enum state myState = UPDATE;
 
-enum movement{STILL, LEFT, RIGHT, UP, DOWN};
+enum movement{STILL=0, LEFT=-2, RIGHT=1, UP=2, DOWN=-3}; // Allows reversing moves using binary negation
 enum movement move = STILL;
 
 enum game{MENU, GAME, WIN, LOSE};
@@ -86,7 +94,44 @@ enum game gameState = MENU;
 enum menu{PLAY, QUIT};
 enum menu menuChoice = PLAY;
 
+enum movement moves[32]; // playback up to 32 moves
+int move_head = 0; // index of latest move;
+
+int clear = 0;
+
 /* Task Functions */
+void add_latest_move(enum movement latest_move)
+{
+	if(move_head < 32)
+	{
+		moves[move_head] = latest_move;
+		move_head++;
+	}
+	else
+	{
+		move_head = 0;
+		moves[move_head] = latest_move;
+	}
+}
+
+void undo_move()
+{
+	char a[32];
+	int rev_last_move = ~moves[move_head-1];
+	move = (enum movement) rev_last_move;
+	sprintf(a, "Index = %d\nReversed move = %d\n", move_head, rev_last_move);
+	System_printf(a);
+	System_flush();
+	if(move_head < 0)
+	{
+		move_head = 31;
+	}
+	else
+	{
+		move_head--;
+	}
+	myState = UPDATE;
+}
 
 Void sensorTask(UArg arg0, UArg arg1)
 {
@@ -141,22 +186,26 @@ Void sensorTask(UArg arg0, UArg arg1)
 			if(gx > 80)
 			{
 				move = UP;
+				add_latest_move(move);
 				myState = UPDATE;
 			}
 			else if(gx < -80)
 			{
 				move = DOWN;
+				add_latest_move(move);
 				myState = UPDATE;
 			}
 			else if(gy > 80)
 			{
 
 				move = RIGHT;
+				add_latest_move(move);
 				myState = UPDATE;
 			}
 			else if(gy < -80)
 			{
 				move = LEFT;
+				add_latest_move(move);
 				myState = UPDATE;
 			}
 			else if(gameState==WIN || gameState==LOSE)
@@ -197,15 +246,7 @@ void sendMsg(char* msg)
 
 void setMenuState(Display_Handle displayHandle,tContext *pContext)
 {
-	if(menuChoice <= QUIT && move == LEFT && menuChoice != PLAY)
-	{
-		menuChoice--;
-	}
-	else if(move == RIGHT && menuChoice != QUIT)
-	{
-		menuChoice++;
-	}
-	else if(move == UP && menuChoice == PLAY)
+	if(move == UP && menuChoice == PLAY)
 	{
 		Display_clear(displayHandle);
 		gameState = GAME;
@@ -297,14 +338,20 @@ Void displayTask(UArg arg0, UArg arg1)
 		}
 		else if(myState == UPDATE && displayHandle && gameState == MENU)
 		{
+			if(clear == 1)
+			{
+				Display_clear(displayHandle);
+				clear = 0;
+			}
 			if(menuChoice == PLAY)
 			{
-				Display_print0(displayHandle, 5, 5, "PLAY ->");
+
 			}
 			else if(menuChoice == QUIT)
 			{
 				Display_print0(displayHandle, 5, 5, "<- QUIT");
 			}
+
 			setMenuState(displayHandle, pContext);
 		}
 		else if(myState == UPDATE && displayHandle && gameState == WIN)
@@ -508,7 +555,18 @@ Void commTaskFxn(UArg arg0, UArg arg1) {
 
 void buttonFxn(PIN_Handle handle, PIN_Id pinId)
 {
-
+	if(pinId == Board_BUTTON0)
+	{
+		System_printf("BUTTON0 pressed\n");
+		System_flush();
+		gameState = MENU;
+		myState = UPDATE;
+		clear = 1;
+	}
+	else if(pinId == Board_BUTTON1)
+	{
+		undo_move();
+	}
 }
 Int main(void) {
 
@@ -531,6 +589,7 @@ Int main(void) {
 	Task_Handle commTask;
 	Task_Params commTaskParams;
 
+
 	// Initialize board
 	Board_initGeneral();
 	Board_initI2C();
@@ -539,6 +598,18 @@ Int main(void) {
 	if (buzzer == NULL)
 	{
 		System_abort("Buzzer pin open failed!");
+	}
+
+	buttonHandle = PIN_open(&buttonState, buttonConfig);
+	if(!buttonHandle)
+	{
+		System_abort("Error initializing button pins\n");
+	}
+
+	button1Handle = PIN_open(&button1State, button1Config);
+	if(!button1Handle)
+	{
+			System_abort("Error initializing button pins\n");
 	}
 
 	// MPU stuff
@@ -596,6 +667,15 @@ Int main(void) {
 	if (commTask == NULL)
 	{
 		System_abort("Task create failed!");
+	}
+
+	if(PIN_registerIntCb(buttonHandle, &buttonFxn) != 0)
+	{
+		System_abort("Error registering button callback function");
+	}
+	if(PIN_registerIntCb(button1Handle, &buttonFxn) != 0)
+	{
+		System_abort("Error registering button1 callback function");
 	}
 
 	/* Sanity check */

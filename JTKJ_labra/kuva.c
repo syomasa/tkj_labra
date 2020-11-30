@@ -543,3 +543,7 @@ const tImage gondola = {
     .pPalette = imgPalette,
     .pPixel = gData
 };
+
+const uint8_t sData[768] = {
+		0xff, 0xff,
+};

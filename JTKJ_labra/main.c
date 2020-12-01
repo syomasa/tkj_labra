@@ -1,3 +1,8 @@
+/* Authors
+ * Mikko Kaasila - 2502425
+ * Santeri Hyvärinen - 2590990
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -29,7 +34,7 @@
 #include "sensors/opt3001.h"
 #include "sensors/mpu9250.h"
 
-#define DEBUG_MUSIC 0
+#define DEBUG_MUSIC 1
 #define TEST_SEND 0
 #define OR ||
 /* Task */
@@ -345,7 +350,8 @@ Void displayTask(UArg arg0, UArg arg1)
 			}
 			if(menuChoice == PLAY)
 			{
-
+				Display_print0(displayHandle, 3, 6, "^^");
+				Display_print0(displayHandle, 5, 5, "PLAY");
 			}
 			else if(menuChoice == QUIT)
 			{
@@ -405,37 +411,10 @@ Void musicTask(UArg arg0, UArg arg1) {
 	System_printf("started musicTask\n");
 	System_flush();
 	while(DEBUG_MUSIC) {
-		if(gameState == GAME && move == UP)
-		{
-			buzzerOpen(buzzer);
-			buzzerSetFrequency(350);
-			Task_sleep(2*10000 / Clock_tickPeriod);
-			buzzerClose();
-		}
-		else if(gameState == GAME && move == DOWN)
-		{
-			buzzerOpen(buzzer);
-			buzzerSetFrequency(350);
-			Task_sleep(2*10000 / Clock_tickPeriod);
-			buzzerClose();
-		}
-		else if(gameState == GAME && move == LEFT)
-		{
-			buzzerOpen(buzzer);
-			buzzerSetFrequency(350);
-			Task_sleep(2*10000 / Clock_tickPeriod);
-			buzzerClose();
-		}
-		else if(gameState == GAME && move == RIGHT)
-		{
-			buzzerOpen(buzzer);
-			buzzerSetFrequency(350);
-			Task_sleep(2*10000 / Clock_tickPeriod);
-			buzzerClose();
-		}
-		else if (gameState == GAME) {
-		//if (menuChoice == PLAY) { // Vili: Tällä voi kokeilla
 
+		if (gameState == GAME)
+		{
+		//if (menuChoice == PLAY) { // Vili: Tällä voi kokeilla
 			buzzerOpen(buzzer);
 			buzzerSetFrequency(750); // d
 			Task_sleep(2*100000 / Clock_tickPeriod);
@@ -491,6 +470,44 @@ Void musicTask(UArg arg0, UArg arg1) {
 			Task_sleep(2*100000 / Clock_tickPeriod);
 
 			buzzerSetFrequency(750);
+			Task_sleep(5*100000 / Clock_tickPeriod);
+
+			buzzerClose();
+			Task_sleep(10000 / Clock_tickPeriod);
+		}
+		else if(gameState == WIN)
+		{
+			buzzerOpen(buzzer);
+
+			buzzerSetFrequency(750);
+			Task_sleep(2*100000 / Clock_tickPeriod);
+
+			buzzerSetFrequency(1000);
+			Task_sleep(2*100000 / Clock_tickPeriod);
+
+			buzzerSetFrequency(1250);
+			Task_sleep(2*100000 / Clock_tickPeriod);
+
+			buzzerSetFrequency(1000);
+			Task_sleep(2*100000 / Clock_tickPeriod);
+
+			buzzerSetFrequency(750);
+			Task_sleep(2*100000 / Clock_tickPeriod);
+
+			buzzerClose();
+			Task_sleep(10000 / Clock_tickPeriod);
+		}
+		else if(gameState == LOSE)
+		{
+			buzzerOpen(buzzer);
+
+			buzzerSetFrequency(500);
+			Task_sleep(5*100000 / Clock_tickPeriod);
+
+			buzzerSetFrequency(300);
+			Task_sleep(5*100000 / Clock_tickPeriod);
+
+			buzzerSetFrequency(150);
 			Task_sleep(5*100000 / Clock_tickPeriod);
 
 			buzzerClose();
